@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang='en'>
+
+<head>
+  <meta charset="utf-8">
+
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
+  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <!-- <link href="http://veg.github.io/phylotree.js/phylotree.css" rel="stylesheet"> -->
+  <link rel="stylesheet" href="./phylotree.css">
+
+  <script src="http://code.jquery.com/jquery.js"></script>
+  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+  <script src="http://d3js.org/d3.v3.min.js"></script>
+  <script src="./phylotree.js"></script>
+  <script src="./js/saveSvgAsPng.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" charset="utf-8"></script>
+</head>
+
+<body>
+  <!-- 菜单部分 -->
+  <div class='container' id="main_display">
+    <div class='row'>
+      <div class='col-md-12'>
+        <div class="btn-toolbar" role="toolbar">
+          <div class="btn-group">
+            <!-- <button type="button" class="btn btn-default btn-sm" data-direction='vertical' data-amount='1'
+              title="Expand vertical spacing">
+              <i class="fa fa-arrows-v"></i>
+            </button>
+            <button type="button" class="btn btn-default btn-sm" data-direction='vertical' data-amount='-1'
+              title="Compress vertical spacing">
+              <i class="fa  fa-compress fa-rotate-135"></i>
+            </button>
+            <button type="button" class="btn btn-default btn-sm" data-direction='horizontal' data-amount='1'
+              title="Expand horizonal spacing">
+              <i class="fa fa-arrows-h"></i>
+            </button>
+            <button type="button" class="btn btn-default btn-sm" data-direction='horizontal' data-amount='-1'
+              title="Compress horizonal spacing">
+              <i class="fa  fa-compress fa-rotate-45"></i>
+            </button> -->
+            <button type="button" class="btn btn-default btn-sm" id="sort_ascending"
+              title="Sort deepest clades to the bototm">
+              倒叙布局
+            </button>
+            <button type="button" class="btn btn-default btn-sm" id="sort_descending"
+              title="Sort deepsest clades to the top">
+              升序布局
+            </button>
+            <button type="button" class="btn btn-default btn-sm" id="sort_original" title="Restore original order">
+              默认布局
+            </button>
+          </div>
+          <!-- <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default active btn-sm" id="linear">
+              <input type="radio" name="options" class="phylotree-layout-mode" autocomplete="off" checked
+                title="Layout left-to-right"> Linear
+            </label>
+            <label class="btn btn-default  btn-sm" id="radial">
+              <input type="radio" name="options" class="phylotree-layout-mode" autocomplete="off"
+                title="Layout radially"> Radial
+            </label>
+          </div> -->
+          <div class="btn-group">
+            <button type="button" class="btn btn-default btn-sm active" id="toggle_animation" title="Toggle animation">
+              动画按钮
+            </button>
+            </label>
+          </div>
+          <div class="btn-group" data-toggle="buttons">
+            <label class="btn btn-default active btn-sm" id="tip_left">
+              <input type="radio" class="phylotree-align-toggler" name="options-align" autocomplete="off" checked
+                title="Align tips labels to branches">
+              右对齐
+              </input>
+            </label>
+            <label class="btn btn-default btn-sm" id="tip_right">
+              <input type="radio" class="phylotree-align-toggler" name="options-align" autocomplete="off"
+                title="Align tips labels to the edge of the plot">
+              左对齐
+              </input>
+            </label>
+          </div>
+          <button type="button" class="btn btn-default btn-sm" id="reset">重置</button>
+          <button type="button" class="btn btn-default btn-sm" id="save-img">保存图片</button>
+          <button type="button" class="btn btn-default btn-sm" id="save-file">导出文件</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 图形部分 -->
+    <svg id="chart_svg" width="1000" height="1000">
+      <!-- legend -->
+      <g id="chart_l"></g>
+      <!-- tree -->
+      <g id="chart_g"></g>
+    </svg>
+
+    <div class="modal-wrap" style="display: none;">
+      <div class="modal-box">
+        <div class="modal-title">
+          <span>添加新分支</span>
+        </div>
+        <div class="list">
+          <span>分支名称：</span>
+          <input type="text" class="input-name">
+        </div>
+        <div class="list">
+          <span>分支长度：</span>
+          <input type="text" class="input-length">
+        </div>
+        <div class="modal-button">
+          <button class="ok">确定</button>
+          <button class="no">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <script src="./js/data.js"></script>
+    <script src="./js/main.js"></script>
+</body>
+
+</html>

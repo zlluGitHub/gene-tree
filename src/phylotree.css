@@ -1,0 +1,151 @@
+.tree-selection-brush .extent {
+  fill-opacity: 0.05;
+  stroke: #fff;
+  shape-rendering: crispEdges;
+}
+
+.tree-scale-bar text {
+  font: sans-serif;
+}
+
+.tree-scale-bar line,
+.tree-scale-bar path {
+  fill: none;
+  stroke: #000;
+  shape-rendering: crispEdges;
+}
+
+.node circle,
+.node ellipse,
+.node rect {
+  fill: steelblue;
+  stroke: black;
+  stroke-width: 0.5px;
+}
+
+.internal-node circle,
+.internal-node ellipse,
+.internal-node rect {
+  /* fill: #CCC; */
+  stroke: black;
+  stroke-width: 0.5px;
+}
+
+.node {
+  font: 10px sans-serif;
+}
+
+.node-selected {
+  fill: #f00 !important;
+}
+
+.node-collapsed circle,
+.node-collapsed ellipse,
+.node-collapsed rect {
+  fill: black !important;
+}
+
+.node-tagged {
+  fill: #00f;
+}
+
+.branch {
+  fill: none;
+  stroke: #999;
+  stroke-width: 2.5px;
+}
+
+.clade {
+  fill: #1f77b4;
+  stroke: #444;
+  stroke-width: 2px;
+  opacity: 0.5;
+}
+
+.branch-selected {
+  stroke: #f00 !important;
+  stroke-width: 3px;
+}
+
+.branch-tagged {
+  stroke: #00f;
+  stroke-dasharray: 10, 5;
+  stroke-width: 2px;
+}
+
+.branch-tracer {
+  stroke: #bbb;
+  stroke-dasharray: 3, 4;
+  stroke-width: 1px;
+}
+
+.branch-multiple {
+  stroke-dasharray: 5, 5, 1, 5;
+  stroke-width: 3px;
+}
+
+.branch:hover {
+  stroke-width: 10px;
+}
+
+.internal-node circle:hover,
+.internal-node ellipse:hover,
+.internal-node rect:hover {
+  fill: black;
+  stroke: #ccc;
+}
+
+.tree-widget {
+}
+
+
+body{
+  padding: 20px 0;
+}
+.row{
+  margin-bottom: 20px;
+}
+
+#d3_layout_phylotree_context_menu li a {
+  cursor: pointer;
+}
+.modal-wrap {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 10;
+  background-color: rgba(0, 0, 0, 0.137);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: #888;
+}
+.modal-wrap .modal-box {
+  background-color: #fff;
+  padding: 10px 20px;
+  width: 350px;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 0, 0, 0.329);
+  box-shadow: 0 0 12px 3px rgba(0, 0, 0, 0.212);
+}
+.modal-wrap .modal-box .modal-title {
+  border-bottom: 1px solid #e8eaec;
+  padding: 10px 0px;
+}
+.modal-wrap .modal-box .list {
+  margin: 25px 0px;
+}
+.modal-wrap .modal-box .modal-button {
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px;
+  border-top: 1px solid #e8eaec;
+}
+.modal-wrap .modal-box .modal-button button {
+  margin-left: 20px;
+}
+.node text {
+  cursor: pointer;
+}
