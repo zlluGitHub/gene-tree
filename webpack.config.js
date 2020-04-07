@@ -1,5 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');   //导入webpack模块
+// console.log(__dirname);
+
 module.exports = {
   mode: 'production',
   entry: path.resolve(__dirname, 'src', 'main.js'),

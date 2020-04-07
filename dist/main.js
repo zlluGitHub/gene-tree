@@ -691,7 +691,7 @@ const parseString = require('xml2js').parseString;
         draw_scale_bar = d3.svg
           .axis()
           .scale(scale)
-          .orient("bottom")
+          .orient("top")
           .tickFormat(function (d) {
             if (d === 0) {
               return "";
@@ -2347,12 +2347,12 @@ const parseString = require('xml2js').parseString;
         .append("g")
         .attr("class", css_classes["tree-container"]);
 
-      // enclosure.attr("transform", function (d) {
-      //   return d3_phylotree_svg_translate([
-      //     offsets[1] + options["left-offset"],
-      //     phylotree.pad_height()
-      //   ]);
-      // });
+      enclosure.attr("transform", function (d) {
+        return d3_phylotree_svg_translate([
+          offsets[1] + options["left-offset"],
+          phylotree.pad_height()
+        ]);
+      });
 
       if (draw_scale_bar) {
         var scale_bar = svg
@@ -2362,12 +2362,12 @@ const parseString = require('xml2js').parseString;
         scale_bar
           .attr("class", css_classes["tree-scale-bar"])
           .style("font-size", ensure_size_is_in_px(scale_bar_font_size))
-          // .attr("transform", function (d) {
-          //   return d3_phylotree_svg_translate([
-          //     offsets[1] + options["left-offset"],
-          //     phylotree.pad_height() - 10
-          //   ]);
-          // })
+          .attr("transform", function (d) {
+            return d3_phylotree_svg_translate([
+              offsets[1] + options["left-offset"],
+              phylotree.pad_height() - 10
+            ]);
+          })
           .call(draw_scale_bar);
         scale_bar.selectAll("text").style("text-anchor", "end");
       } else {
@@ -2993,9 +2993,7 @@ const parseString = require('xml2js').parseString;
             phylotree.handle_node_click(d);
           });
 
-          d3.layout.fontSize = shown_font_size;//暴露出去
-
-          ele.enter().append("text").attr("dx", options.itemStyle.node.font.x).attr("dy", options.itemStyle.node.font.y).attr("style", 'font-size: ' + (options.itemStyle.node.font.size?options.itemStyle.node.font.size:shown_font_size*0.8) + 'px; font-family:' + options.itemStyle.node.font.family + ';')
+          ele.enter().append("text").attr("dx", options.itemStyle.node.font.x).attr("dy", options.itemStyle.node.font.y).attr("style", 'font-size: ' + options.itemStyle.node.font.size + 'px; font-family:' + options.itemStyle.node.font.family + ';')
             .attr("fill", function (d) {
               if (options.itemStyle.node.font.color) {
                 return options.itemStyle.node.font.color;

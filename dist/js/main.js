@@ -27,10 +27,9 @@ function init_tree(tree_data, isUpdate) {
   // svg.attr("width", 1200)
   //   .attr("height", 1200);chart_svg
   var config = {
-    leftOffset: 120,
     legend: {
       x: 10,
-      y: 20,
+      y: 30,
       space: 12,
       font: {
         size: 12,
@@ -40,8 +39,7 @@ function init_tree(tree_data, isUpdate) {
         y: 0
       },
       shape: {
-        type: 'circle', // rect circle
-        r: 7,
+        type: 'rect',
         width: 15,
         height: 15,
         stroke: "#666",
@@ -52,11 +50,11 @@ function init_tree(tree_data, isUpdate) {
     node: {
       size: 5,
       font: {
-        // size: "",
-        // color: "",
+        size: 12,
+        // color: "#666",
         family: '"Helvetica Neue", Helvetica, sans-serif',
-        x: -30,
-        y: 12
+        x: -35,
+        y: 15
       }
     }
 
@@ -77,14 +75,12 @@ function init_tree(tree_data, isUpdate) {
     { index: 'leg4', name: '(' + scale * 1 + '~' + scale * 2 + ']', color: "#FFA503", start: scale * 1, end: scale * 2 },
     { index: 'leg5', name: '[0~' + scale * 1 + ']', color: "#FFE700", start: 0, end: scale * 1 },
   ];
-
-
-  // element.append("circle").attr("cx", x_shift + font_size * i + i * distance + 7).attr("cy", 0).attr("r", 8).attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
-  // .attr("cursor", "pointer")
-  // .append("title").text(item.label)
-
-
-
+  //   var text = element.selectAll(".legend").data(tree_attributes[node_data.name]);
+  //   text.enter().append("text").attr("class", "legend").text(function (params) {
+  //     return '原材料zdfvfdfdf';
+  //   }).attr("transform", function (d, i) {
+  //     return "translate(" + (x_shift + font_size * i + i * 12 + 10) + ",-10) rotate(-90)";
+  //   });
   var isClickArr = [], each = null;
   chart_l.attr("transform", 'translate(' + config.legend.x + ',' + config.legend.y + ')')
   var legend = chart_l.selectAll(".legend").data(legendArr).enter().append("g").attr("class", "legend")
@@ -95,17 +91,17 @@ function init_tree(tree_data, isUpdate) {
       return 'translate(0,' + (config.legend.space + config.legend.shape.height) * i + ')'
     })
     .on("mouseover", function (d, i) {
-      d3.select(this).select(config.legend.shape.type).transition().duration(200).attr("transform", "translate(-1,-1)scale(1.2)")
+      d3.select(this).select('rect').transition().duration(200).attr("transform", "translate(-1,-1)scale(1.2)")
       d3.selectAll('.' + d3.select(this).attr("index")).transition().duration(200).attr("r", 7);
     })
     .on("mouseout", function (d, i) {
       var _this = this;
       each = d3.select(this).attr("index");
-      d3.select(this).select(config.legend.shape.type).transition().duration(200).attr("transform", "")
+      d3.select(this).select('rect').transition().duration(200).attr("transform", "")
       d3.selectAll('.' + each).transition().duration(200).attr("r", config.node.size);
       isClickArr.forEach(function (item, i) {
         if (each === item) {
-          d3.select(_this).select(config.legend.shape.type).transition().duration(200).attr("transform", "translate(-1,-1)scale(1.2)")
+          d3.select(_this).select('rect').transition().duration(200).attr("transform", "translate(-1,-1)scale(1.2)")
           d3.selectAll('.' + item).transition().duration(200).attr("r", 7);
         }
       });
@@ -126,11 +122,11 @@ function init_tree(tree_data, isUpdate) {
       if (!is) {
         isClickArr.push(each)
       };
-      d3.select(this).select(config.legend.shape.type).transition().duration(200).attr("transform", "translate(-1,-1)scale(1.2)")
+      d3.select(this).select('rect').transition().duration(200).attr("transform", "translate(-1,-1)scale(1.2)")
       d3.selectAll('.' + d3.select(this).attr("index")).transition().duration(200).attr("r", 7);
     });
 
-  legend.append(config.legend.shape.type).attr("r", config.legend.shape.r).attr("width", config.legend.shape.width).attr("height", config.legend.shape.height)
+  legend.append(config.legend.shape.type).attr("width", config.legend.shape.width).attr("height", config.legend.shape.height)
     .attr("fill", function (item) {
       return item.color
     }).attr("stroke", config.legend.shape.stroke).attr("style", config.legend.shape.style)
@@ -138,8 +134,6 @@ function init_tree(tree_data, isUpdate) {
   legend.append("text").attr("x", config.legend.font.x + 23).attr("y", config.legend.font.y + 10)
     .attr("style", 'font-size: ' + config.legend.font.size + 'px; fill: ' + config.legend.font.color + '; font-family: ' + config.legend.font.color + ';').text(function (obj) {
       return obj.name
-    }).attr("transform", function (d) {
-      return "translate(-5,-" + (config.legend.shape.r - 1) + ")"
     })
 
   // chart_l.append("g").attr("width", 2);
@@ -150,8 +144,7 @@ function init_tree(tree_data, isUpdate) {
   var chart_g = d3.select("#chart_g");
   tree = d3.layout.phylotree()
     .options({
-      'left-offset': config.leftOffset,
-      'show-scale': true,
+      'show-scale': false,
       'left-right-spacing': 'fit-to-size',
       'top-bottom-spacing': 'fit-to-size',
       // zoom: true,
@@ -169,7 +162,7 @@ function init_tree(tree_data, isUpdate) {
   var standard_label = tree.branch_name();
 
   tree.branch_name(function (node) { // 最右侧 label 名字
-    return standard_label(node) + " ";
+    return standard_label(node) + "                    ";
     // return standard_label(node);
   });
 
@@ -194,7 +187,7 @@ function init_tree(tree_data, isUpdate) {
   tree.style_nodes(function (element, node_data, i) {
     // 右边的小方块和label
     if (node_data.name in configData) {
-      var font_size = d3.layout.fontSize;
+      var font_size = parseFloat(element.select("text").style("font-size"));
       var move_past_label = maximum_length * 0.57 * font_size;
       var x_shift = tree.shift_tip(node_data)[0] + move_past_label;
       var node_item = configData[node_data.name], i = 0;
@@ -271,7 +264,7 @@ function init_tree(tree_data, isUpdate) {
       case 'square'://长方形
 
         element.append("rect").attr("width", font_size).attr("height", font_size).attr("y", -font_size / 2).style("fill", fill).attr("x", x_shift + font_size * i + i * distance)
-          .attr("cursor", "pointer")
+          // .attr("cursor", "pointer")
           .append("title").text(item.label)
         // .on("mouseover", function (d, i) {
         //   element.select('.' + classs)
@@ -286,7 +279,7 @@ function init_tree(tree_data, isUpdate) {
         break;
       case 'circle'://圆形
         element.append("circle").attr("cx", x_shift + font_size * i + i * distance + 7).attr("cy", 0).attr("r", 8).attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
-          .attr("cursor", "pointer")
+          // .attr("cursor", "pointer")
           .append("title").text(item.label)
         // .on("mouseover", function (d, i) {
         //   element.select('.' + classs)
@@ -301,7 +294,7 @@ function init_tree(tree_data, isUpdate) {
         break;
       case 'rhombus'://菱形
         element.append("polygon").attr("points", "10,10 17.5,5 25,10 17.5,15").attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;').attr("transform", "translate(" + (x_shift + font_size * i + i * distance - 16) + ",-13) scale(1.3)")
-          .attr("cursor", "pointer")
+          // .attr("cursor", "pointer")
           .append("title").text(item.label)
         // .on("mouseover", function (d, i) {
         //   element.select('.' + classs)
@@ -317,7 +310,7 @@ function init_tree(tree_data, isUpdate) {
       default: //正方形
         console.log(item);
         element.append("rect").attr("width", font_size + length).attr("height", font_size).attr("y", -font_size / 2).style("fill", fill).attr("x", x_shift + font_size * i + i * distance)
-          .attr("cursor", "pointer")
+          // .attr("cursor", "pointer")
           .append("title").text(item.label)
         // .on("mouseover", function (d, i) {
         //   element.select('.' + classs).attr("style", "display: block;");
@@ -340,8 +333,8 @@ function init_tree(tree_data, isUpdate) {
 
   //去除空格
   function trim(testStr) {
-    // testStr = testStr.replace(/\(\,\(/g, "(("); //去掉,
-    // testStr = testStr.replace(/\)\,\)/g, "))"); //去掉,
+    testStr = testStr.replace(/\(\,\(/g, "(("); //去掉,
+    testStr = testStr.replace(/\)\,\)/g, "))"); //去掉,
     testStr = testStr.replace(/\ +/g, ""); //去掉空格
     testStr = testStr.replace(/[ ]/g, "");    //去掉空格
     testStr = testStr.replace(/[\r\n]/g, ""); //去掉回车换行
@@ -349,38 +342,33 @@ function init_tree(tree_data, isUpdate) {
   }
   // 添加样式
 
-  // d3.selectAll(".tree-selection-brush .extent").attr("fill-opacity", 0.05).attr("stroke", "#fff").attr("shape-rendering", "crispEdges")
-  // d3.selectAll("tree-scale-bar text").attr("font", "sans-serif")
-  // d3.selectAll(".tree-scale-bar line, .tree-scale-bar path").attr("fill", "none").attr("stroke", "#000").attr("shape-rendering", "crispEdges")
-  // // d3.selectAll("circle").attr("fill", "#999")
-  // d3.selectAll(".node").attr("fill", "10px sans-serif")
-  // d3.selectAll(".node-selected").attr("fill", "#f00")
-  // d3.selectAll(".node-collapsed circle, .node-collapsed ellipse, .node-collapsed rect").attr("fill", "black")
-  // d3.selectAll(".node-tagged").attr("fill", "#00f")
-  // d3.selectAll(".branch").attr("fill", "none").attr("stroke", "#999").attr("stroke-width", "2px")
-  // d3.selectAll(".clade").attr("fill", "#1f77b4").attr("stroke", "#444").attr("stroke-width", "2px").attr("opacity", "0.5")
-  // d3.selectAll(".branch-selected").attr("stroke", "#f00").attr("stroke-width", "3px")
-  // d3.selectAll(".branch-tagged").attr("stroke", "#00f").attr("stroke-width", "2px").attr("stroke-dasharray", "10,5")
-  // d3.selectAll(".branch-tracer").attr("stroke", "#bbb").attr("stroke-width", "1px").attr("stroke-dasharray", "3,4")
-  // d3.selectAll(".branch-multiple").attr("stroke-dasharray", "5, 5, 1, 5").attr("stroke-width", "3px")
-
+  d3.selectAll(".tree-selection-brush .extent").attr("fill-opacity", 0.05).attr("stroke", "#fff").attr("shape-rendering", "crispEdges")
+  d3.selectAll("tree-scale-bar text").attr("font", "sans-serif")
+  d3.selectAll(".tree-scale-bar line, .tree-scale-bar path").attr("fill", "none").attr("stroke", "#000").attr("shape-rendering", "crispEdges")
+  // d3.selectAll("circle").attr("fill", "#999")
+  d3.selectAll(".node").attr("fill", "10px sans-serif")
+  d3.selectAll(".node-selected").attr("fill", "#f00")
+  d3.selectAll(".node-collapsed circle, .node-collapsed ellipse, .node-collapsed rect").attr("fill", "black")
+  d3.selectAll(".node-tagged").attr("fill", "#00f")
+  d3.selectAll(".branch").attr("fill", "none").attr("stroke", "#999").attr("stroke-width", "2px")
+  d3.selectAll(".clade").attr("fill", "#1f77b4").attr("stroke", "#444").attr("stroke-width", "2px").attr("opacity", "0.5")
+  d3.selectAll(".branch-selected").attr("stroke", "#f00").attr("stroke-width", "3px")
+  d3.selectAll(".branch-tagged").attr("stroke", "#00f").attr("stroke-width", "2px").attr("stroke-dasharray", "10,5")
+  d3.selectAll(".branch-tracer").attr("stroke", "#bbb").attr("stroke-width", "1px").attr("stroke-dasharray", "3,4")
+  d3.selectAll(".branch-multiple").attr("stroke-dasharray", "5, 5, 1, 5").attr("stroke-width", "3px")
 
   var dom_g = document.querySelector('#chart_g');
-  // var g_width = dom_g.getBoundingClientRect().width;
-  var g_height = dom_g.getBoundingClientRect().height;
-  chart_g.attr("transform", "translate(0," + ((svg_height - g_height) / 2) + ") scale(1)")
+  var g_width = dom_g.getBoundingClientRect().width
+  var g_height = dom_g.getBoundingClientRect().height
+  chart_g.attr("transform", "translate(" + ((svg_width - g_width) / 2 + 50) + "," + ((svg_height - g_height) / 2) + ") scale(1)")
 
-  var phylotreeContainer = document.querySelector('.phylotree-container');
-  d3.select(".tree-scale-bar").attr("transform", "translate(" + (config.leftOffset - 30) + "," + (phylotreeContainer.getBoundingClientRect().height - d3.layout.fontSize + 5) + ")")
-
-  d3.select(".phylotree-container").attr("transform", "translate(" + config.leftOffset + ",-10)")
 }
 
 
 // 初始化
 // init_tree(example_tree_text);
-// init_tree(example_tree_16s);
-init_tree(example_tree2);
+init_tree(example_tree_16s);
+// init_tree(example_tree2);
 // init_tree(iTOL_salmonella_new);
 // init_tree(fasttree);
 
@@ -427,10 +415,12 @@ $("#sort_descending").on("click", function (e) {
 // $("[data-mode='" + (tree.radial() ? 'radial' : 'linear') + "']").on("click", function (e) {
 $("#radial").on("click", function (e) {
   tree.radial(true).placenodes().update()
+
 });
 $("#linear").on("click", function (e) {
   tree.radial(false).placenodes().update()
 });
+
 
 $("#toggle_animation").on("click", function (e) {
   var current_mode = $(this).hasClass('active');
@@ -438,6 +428,8 @@ $("#toggle_animation").on("click", function (e) {
   isTransitions = !current_mode
   tree.options({ 'transitions': isTransitions });
 });
+
+
 
 // 左右对齐
 $("#tip_left").on("click", function (e) {
@@ -486,6 +478,11 @@ function exportRaw(name, data) {
   save_link.download = name;
   fakeClick(save_link);
 }
+
+// function saveFile() {
+
+// }
+
 
 
 // 图片下载

@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "concurrently": "^3.6.1",
+    "html-webpack-plugin": "^4.0.4",
     "http-server": "^0.11.1",
     "jsdom": "9.12.x",
     "should": "^11.2.1",
@@ -31,7 +32,7 @@
   "scripts": {
     "docs": "sphinx-build -b html docs documentation",
     "develop": "concurrently \"webpack --watch --mode=development\" \"http-server\"",
-    "build": "webpack" ,
+    "build": "webpack",
     "dev": "webpack-dev-server --open --port 3000 --contentBase src --hot"
   }
 }
