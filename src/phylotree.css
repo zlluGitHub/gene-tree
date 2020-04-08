@@ -96,7 +96,6 @@
   transform: scale(1.3);
 }
 
-
 body {
   padding: 20px 0;
 }
@@ -152,4 +151,13 @@ body {
 }
 .node text:hover {
   fill: rgb(0, 51, 255);
+}
+
+::selection {
+  background: transparent; /* WebKit/Blink Browsers */
+}
+.flag_path,
+.genus_path,
+.random_path {
+  transform: rotate(0deg) !important;
 }

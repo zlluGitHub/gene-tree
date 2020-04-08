@@ -4,28 +4,14 @@ var treeData = "";
 var stepArrData = [];
 var stepIndex = 0;
 
-
 function init_tree(tree_data, isUpdate) {
   treeData = trim(tree_data);
   if (!isUpdate) {
     stepArrData.push(treeData);
     stepIndex = stepArrData.length - 1;
-  }
+  };
 
-  // tree = d3.layout.phylotree();
-  // tree.branch_length (null);
-  // tree.branch_name (null);
-  // tree.node_span ('equal');
-  // tree.options ({'draw-size-bubbles' : false}, false);
-  // //tree.radial (true);
-  // tree.style_nodes (node_colorizer);
-  // tree.style_edges (edge_colorizer);
-  // tree.selection_label (current_selection_name);
-  // tree.node_circle_size (undefined);
-
-  // var svg = d3.select("#tree_svg")
-  // svg.attr("width", 1200)
-  //   .attr("height", 1200);chart_svg
+  // 配置项
   var config = {
     leftOffset: 120,
     legend: {
@@ -47,7 +33,21 @@ function init_tree(tree_data, isUpdate) {
         stroke: "#666",
         style: "stroke-width: 0.5;"
       },
-
+    },
+    genus_legend: {
+      show: false,
+      distance: 30, //label间距
+      x: 0,
+      y: 10,
+      space: 5,
+      padding: 10
+    },
+    flag_legend: {
+      x: 0,
+      y: 0,
+      space: 5,
+      padding: 10,
+      color: "#aaa"
     },
     node: {
       size: 5,
@@ -59,31 +59,21 @@ function init_tree(tree_data, isUpdate) {
         y: 12
       }
     }
-
-  }
-
-
+  };
 
   var dom_svg = document.querySelector('#chart_svg');
-  // 添加图例
+
+  // 添加 node 节点图例
   var chart_l = d3.select('#chart_l');
   var cl = labelConfig.identity_genus.length;
   var scale = (cl[1] - cl[0]) / 5;
-
   var legendArr = [
-    { index: 'leg1', name: '(' + scale * 4 + '~' + scale * 5 + ']', color: "#AE271C", start: scale * 4, end: scale * 5 },
-    { index: 'leg2', name: '(' + (scale * 3).toFixed(1) + '~' + scale * 4 + ']', color: "#F93529", start: (scale * 3).toFixed(1), end: scale * 4 },
-    { index: 'leg3', name: '(' + scale * 2 + '~' + (scale * 3).toFixed(1) + ']', color: "#F96D29", start: scale * 2, end: (scale * 3).toFixed(1) },
-    { index: 'leg4', name: '(' + scale * 1 + '~' + scale * 2 + ']', color: "#FFA503", start: scale * 1, end: scale * 2 },
-    { index: 'leg5', name: '[0~' + scale * 1 + ']', color: "#FFE700", start: 0, end: scale * 1 },
+    { index: 'leg1', name: '(' + (cl[0] + scale * 4).toFixed(2) + '~' + (cl[0] + scale * 5).toFixed(2) + ']', color: "#AE271C", start: (cl[0] + scale * 4).toFixed(2), end: (cl[0] + scale * 5).toFixed(2) },
+    { index: 'leg2', name: '(' + (cl[0] + scale * 3).toFixed(2) + '~' + (cl[0] + scale * 4).toFixed(2) + ']', color: "#F93529", start: (cl[0] + scale * 3).toFixed(2), end: cl[0] + scale * 4 },
+    { index: 'leg3', name: '(' + (cl[0] + scale * 2).toFixed(2) + '~' + (cl[0] + scale * 3).toFixed(2) + ']', color: "#F96D29", start: (cl[0] + scale * 2).toFixed(2), end: (cl[0] + scale * 3).toFixed(1) },
+    { index: 'leg4', name: '(' + (cl[0] + scale * 1).toFixed(2) + '~' + (cl[0] + scale * 2).toFixed(2) + ']', color: "#FFA503", start: (cl[0] + scale * 1).toFixed(2), end: cl[0] + scale * 2 },
+    { index: 'leg5', name: '[' + (cl[0]).toFixed(2) + '~' + (cl[0] + scale * 1).toFixed(2) + ']', color: "#FFE700", start: (cl[0] + scale * 1).toFixed(2), end: (scale * 1).toFixed(2) },
   ];
-
-
-  // element.append("circle").attr("cx", x_shift + font_size * i + i * distance + 7).attr("cy", 0).attr("r", 8).attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
-  // .attr("cursor", "pointer")
-  // .append("title").text(item.label)
-
-
 
   var isClickArr = [], each = null;
   chart_l.attr("transform", 'translate(' + config.legend.x + ',' + config.legend.y + ')')
@@ -109,10 +99,6 @@ function init_tree(tree_data, isUpdate) {
           d3.selectAll('.' + item).transition().duration(200).attr("r", 7);
         }
       });
-
-      // if (isClickArr !== d3.select(this).attr("index")) {
-      //   d3.selectAll('.' + d3.select(this).attr("index")).transition().duration(200).attr("r", config.node.size);
-      // }
     })
     .on("click", function (d, i) {
       var is = false;
@@ -136,13 +122,12 @@ function init_tree(tree_data, isUpdate) {
     }).attr("stroke", config.legend.shape.stroke).attr("style", config.legend.shape.style)
 
   legend.append("text").attr("x", config.legend.font.x + 23).attr("y", config.legend.font.y + 10)
-    .attr("style", 'font-size: ' + config.legend.font.size + 'px; fill: ' + config.legend.font.color + '; font-family: ' + config.legend.font.color + ';').text(function (obj) {
+    .attr("style", 'font-size: ' + config.legend.font.size + 'px; fill: ' + config.legend.font.color + '; font-family: ' + config.legend.font.family + ';').text(function (obj) {
       return obj.name
     }).attr("transform", function (d) {
       return "translate(-5,-" + (config.legend.shape.r - 1) + ")"
     })
 
-  // chart_l.append("g").attr("width", 2);
 
   // 初始化树图
   var svg_width = dom_svg.getBoundingClientRect().width
@@ -170,26 +155,17 @@ function init_tree(tree_data, isUpdate) {
 
   tree.branch_name(function (node) { // 最右侧 label 名字
     return standard_label(node) + " ";
-    // return standard_label(node);
   });
 
   tree(d3.layout.newick_parser(treeData));
   // tree.spacing_x(10).spacing_y(20);
 
   var maximum_length = 0;
-  // var tree_attributes = {};
   tree.traverse_and_compute(function (node) {
     if (d3.layout.phylotree.is_leafnode(node)) {
-      // tree_attributes[node.name] = [0, 0, 0, 0, 0].map(function () {
-      //   return Math.floor(Math.random() * 5);
-      // });
       maximum_length = maximum_length < node.name.length ? node.name.length : maximum_length;
     }
   });
-
-  // tree.style_edges(function (node) {
-  //   // console.log(node);
-  // })
 
   tree.style_nodes(function (element, node_data, i) {
     // 右边的小方块和label
@@ -221,7 +197,6 @@ function init_tree(tree_data, isUpdate) {
         i = i + 1;
       }
 
-
       if (labelConfig.identity_genus.position === 2) {
         shape_select(element, identity_genus, x_shift, font_size, i, 'genus')
         i = i + 1;
@@ -240,37 +215,21 @@ function init_tree(tree_data, isUpdate) {
       } else if (labelConfig.random.position === 3) {
         shape_select(element, random, x_shift, font_size, i, 'random')
       }
-
-      // var ele = element.selectAll("rect").data(tree_attributes[node_data.name]);
-      // ele.enter().append("rect");
-      // ele.attr("width", font_size + 2)
-      //   .attr("height", font_size)
-      //   .attr("y", -font_size / 2).style("fill", function (d, i) {
-      //     return attribute_to_color(d);
-      //   });
-      // var move_past_label = maximum_length * 0.57 * font_size;
-      // var x_shift = tree.shift_tip(node_data)[0] + move_past_label;
-      // ele.attr("transform", function (d, i) { return null; }).attr("x", function (d, i) {
-      //   return x_shift + font_size * i + i * 12;
-      // });
-
     }
-    // }
   });
+
+  var distance = config.genus_legend.distance; //label间距
   function shape_select(element, item, x_shift, font_size, i, classs) {
     var fill = item.color ? item.color : '#ccc';
-    var distance = 30; //label间距
+
     var range = labelConfig.identity_genus ? labelConfig.identity_genus.length : [0, 1];
 
-    var length = item.length ? (item.length * distance / (range[1] - range[0])) - 5 : 0;
-
-
-
+    var length = item.length ? (item.length / range[1] * distance) : 0;
+    console.log(item.length / range[1]);
 
     switch (item.shape) {
       case 'square'://长方形
-
-        element.append("rect").attr("width", font_size).attr("height", font_size).attr("y", -font_size / 2).style("fill", fill).attr("x", x_shift + font_size * i + i * distance)
+        element.append("rect").attr("width", font_size * 2).attr("height", font_size).attr("y", "-" + font_size * 0.7).style("fill", fill).attr("x", x_shift + font_size * i + i * distance + font_size * 0.3)
           .attr("cursor", "pointer")
           .append("title").text(item.label)
         // .on("mouseover", function (d, i) {
@@ -283,65 +242,39 @@ function init_tree(tree_data, isUpdate) {
         //     .attr("style", "display: none;");
         // });
 
+        break;
+      case 'triangle'://三角形
+        element.append("polygon").attr("points", "7.5,0 15,12 0,12").attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;').attr("transform", "translate(" + (x_shift + font_size * i + i * distance + font_size * 0.6) + ",-" + font_size * 0.8 + ") scale(" + font_size * 0.08 + ")")
+          .attr("cursor", "pointer")
+          .append("title").text(item.label)
         break;
       case 'circle'://圆形
-        element.append("circle").attr("cx", x_shift + font_size * i + i * distance + 7).attr("cy", 0).attr("r", 8).attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
+        element.append("circle").attr("cx", x_shift + font_size * i + i * distance + font_size * 1.2).attr("cy", "-" + font_size * 0.1).attr("r", font_size * 0.6).attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
           .attr("cursor", "pointer")
           .append("title").text(item.label)
-        // .on("mouseover", function (d, i) {
-        //   element.select('.' + classs)
-        //     .attr("style", "display: block;");
-        // })
-        // .on("mouseout", function (d, i) {
-        //   // d3.select(this)
-        //   element.select('.' + classs)
-        //     .attr("style", "display: none;");
-        // });
-
         break;
       case 'rhombus'://菱形
-        element.append("polygon").attr("points", "10,10 17.5,5 25,10 17.5,15").attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;').attr("transform", "translate(" + (x_shift + font_size * i + i * distance - 16) + ",-13) scale(1.3)")
+        element.append("polygon").attr("points", "10,10 17.5,5 25,10 17.5,15").attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;').attr("transform", "translate(" + (x_shift + font_size * i + i * distance - distance / 2 + font_size * 0.8) + ",-" + font_size * 1.1 + ") scale(" + font_size * 0.1 + ")")
           .attr("cursor", "pointer")
           .append("title").text(item.label)
-        // .on("mouseover", function (d, i) {
-        //   element.select('.' + classs)
-        //     .attr("style", "display: block;");
-        // })
-        // .on("mouseout", function (d, i) {
-        //   // d3.select(this)
-        //   element.select('.' + classs)
-        //     .attr("style", "display: none;");
-        // });
+        break;
+      default: //有长度
+        var offset = length ? 0 : font_size * 0.8;
+        var width = length === 0 ? font_size : length;
+        // console.log(length);
 
-        break;
-      default: //正方形
-        console.log(item);
-        element.append("rect").attr("width", font_size + length).attr("height", font_size).attr("y", -font_size / 2).style("fill", fill).attr("x", x_shift + font_size * i + i * distance)
+        element.append("rect").attr("width", width).attr("height", font_size).attr("y", -font_size / 2).style("fill", fill).attr("x", x_shift + font_size * i + i * distance + offset)
           .attr("cursor", "pointer")
           .append("title").text(item.label)
-        // .on("mouseover", function (d, i) {
-        //   element.select('.' + classs).attr("style", "display: block;");
-        // })
-        // .on("mouseout", function (d, i) {
-        //   // d3.select(this)
-        //   //  .transition()
-        //   // .duration(500)
-        //   // .attr("transform", "scale(1)")
-        //   element.select('.' + classs).attr("style", "display: none;");
-        // });
         break;
-    }
-    // element.append("title").text(item.label)
-    // .attr("dx", x_shift + font_size * i + i * distance).attr("dy", -10).attr("style", "display: none;").attr("class", classs);
+    };
   }
 
   tree.layout();
 
-
+  var fontSize = d3.layout.fontSize;
   //去除空格
   function trim(testStr) {
-    // testStr = testStr.replace(/\(\,\(/g, "(("); //去掉,
-    // testStr = testStr.replace(/\)\,\)/g, "))"); //去掉,
     testStr = testStr.replace(/\ +/g, ""); //去掉空格
     testStr = testStr.replace(/[ ]/g, "");    //去掉空格
     testStr = testStr.replace(/[\r\n]/g, ""); //去掉回车换行
@@ -364,14 +297,237 @@ function init_tree(tree_data, isUpdate) {
   // d3.selectAll(".branch-tracer").attr("stroke", "#bbb").attr("stroke-width", "1px").attr("stroke-dasharray", "3,4")
   // d3.selectAll(".branch-multiple").attr("stroke-dasharray", "5, 5, 1, 5").attr("stroke-width", "3px")
 
+  // 刷新时删除图例，防止重复出现
+  d3.select("#genus-legend").remove();
+  d3.select("#flag-legend").remove();
+  d3.select("#random-legend").remove();
+  d3.select("#flag-legend-button").remove();
+  d3.select("#genus-legend-button").remove();
+  d3.select("#random-legend-button").remove();
 
+  var leftOffsetObj = document.querySelector('.domain').getBoundingClientRect();
+  leftOffset = leftOffsetObj.width + leftOffsetObj.x - 32 + fontSize;
+  console.log(leftOffset);
+
+
+  // 根据配置进行渲染
+  var i = 0;
+  if (labelConfig.identity_genus.position === 1) {
+    identity_genus_fn()
+    i = i + 1;
+  } else if (labelConfig.flag.position === 1) {
+    flag_fn()
+    i = i + 1;
+  } else if (labelConfig.random.position === 1) {
+    random_fn()
+    i = i + 1;
+  }
+
+  if (labelConfig.identity_genus.position === 2) {
+    identity_genus_fn()
+    i = i + 1;
+  } else if (labelConfig.flag.position === 2) {
+    flag_fn()
+    i = i + 1;
+  } else if (labelConfig.random.position === 2) {
+    random_fn()
+    i = i + 1;
+  }
+
+  if (labelConfig.identity_genus.position === 3) {
+    identity_genus_fn()
+  } else if (labelConfig.flag.position === 3) {
+    flag_fn()
+  } else if (labelConfig.random.position === 3) {
+    random_fn()
+  }
+
+  //添加 identity_genus 图例
+  function identity_genus_fn() {
+    // 展开按钮
+    var genusLegendButton = d3.select('#chart_svg').append("g").attr("id", "genus-legend-button").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i + fontSize * 0.3) + ',' + config.genus_legend.y + ')').attr("cursor", "pointer")
+      .on("click", function () {
+        var d = d3.select('#genus-legend');
+        d3.select('#flag-legend').attr("display", "none");
+        d3.select('#random-legend').attr("display", "none");
+
+        d3.select('#genus_path').attr("class", "");
+        d3.select('#flag_path').attr("class", "");
+        d3.select('#random_path').attr("class", "");
+
+        if (d.attr("display") === 'block') {
+          d.attr("display", "none");
+        } else {
+          d.attr("display", "block");
+          d3.select('#genus_path').attr("class", "genus_path");;
+        }
+
+      });
+    genusLegendButton.append("text").text("genus").attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
+    genusLegendButton.append("g").attr("transform", "translate(" + fontSize * 2.6 + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "genus_path")
+
+    // 图例内容
+    var identity_genus_data = [], igObject = labelConfig.identity_genus.legend.color, bgcHigth = 0;
+    for (var key in igObject) {
+      bgcHigth = bgcHigth + config.genus_legend.space + fontSize
+      identity_genus_data.push({ name: igObject[key], color: key })
+    };
+    bgcHigth = bgcHigth + config.genus_legend.padding * 2;
+    var genus_box = d3.select('#chart_svg').append("g").attr("id", "genus-legend").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i - 50) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none")
+
+    genus_box.append("rect").attr("width", 170).attr("height", bgcHigth).attr("style", "fill:rgba(255,255,255,.9);stroke:rgba(0,0,0,.4);stroke-width: 0.3;") //背景
+
+    var genus_legend = genus_box.selectAll(".genus-item").data(identity_genus_data).enter().append("g").attr("class", "genus-item")
+      .attr("transform", function (item, i) {
+        return 'translate(' + config.genus_legend.padding + ',' + ((config.genus_legend.space + fontSize) * i + config.genus_legend.padding) + ')'
+      });
+
+    genus_legend.append("rect").attr("width", fontSize * 1.5).attr("height", fontSize * 0.8).attr("fill", function (d) {
+      return d.color
+    }).attr("style", "stroke:#aaa;stroke-width:0.5;")
+
+    genus_legend.append("text").attr("x", fontSize * 2).attr("y", fontSize / 2 + 4).text(function (obj) { return obj.name })
+      .attr("style", 'font-size: ' + fontSize * 0.9 + 'px;')
+      .attr("fill", "#999")
+
+  }
+
+
+  //添加 flag 图例
+  function flag_fn() {
+
+    // 展开按钮
+    var flagLegendButton = d3.select('#chart_svg').append("g").attr("id", "flag-legend-button").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i + fontSize * 0.7) + ',' + config.genus_legend.y + ')').attr("cursor", "pointer")
+      .on("click", function () {
+        var d = d3.select('#flag-legend');
+        d3.select('#genus-legend').attr("display", "none");
+        d3.select('#random-legend').attr("display", "none");
+
+        d3.select('#genus_path').attr("class", "");
+        d3.select('#flag_path').attr("class", "");
+        d3.select('#random_path').attr("class", "");
+
+        if (d.attr("display") === 'block') {
+          d.attr("display", "none");
+        } else {
+          d.attr("display", "block");
+          d3.select('#flag_path').attr("class", "flag_path");
+        }
+
+      });
+    flagLegendButton.append("text").text("flag").attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
+    flagLegendButton.append("g").attr("transform", "translate(" + fontSize * 1.6 + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "flag_path")
+
+    // 图例内容
+    var flagLegend = labelConfig.flag.legend.shape, bgcHigth = 0;
+    var flag_box = d3.select('#chart_svg').append("g").attr("id", "flag-legend").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i - 10) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none");
+    var flag_bgc = flag_box.insert("rect").attr("fill", "rgba(255,255,255,.9)").attr("style", "stroke:rgba(0,0,0,.4);stroke-width: 0.3;") //背景
+    for (var key in flagLegend) {
+      bgcHigth = bgcHigth + config.genus_legend.space + fontSize;
+      var flag_g = flag_box.append("g").attr("class", "flag-item").attr("transform", 'translate(' + config.genus_legend.padding + ',' + bgcHigth + ')');
+      var text_x = fontSize * 2, text_y = fontSize / 2 + 4;
+      switch (key) {
+        case 'square'://长方形
+          flag_g.append("rect").attr("width", fontSize).attr("height", fontSize * 0.7).attr("style", 'fill:' + config.flag_legend.color + '; stroke:black;stroke-width:0.5px;')
+            .append("title").text(flagLegend[key])
+          break;
+        case 'circle'://圆形
+          text_y = text_y - 5
+          flag_g.append("circle").attr("r", fontSize * 0.5).attr("style", 'fill:' + config.flag_legend.color + '; stroke:black;stroke-width:0.5px;')
+            .attr("cx", fontSize * 0.4).attr("cy", 0)
+            .append("title").text(flagLegend[key])
+          break;
+        case 'rhombus'://菱形
+          text_y = text_y - 1
+          flag_g.append("polygon").attr("points", "10,10 17.5,5 25,10 17.5,15").attr("style", 'fill:' + config.flag_legend.color + '; stroke:black;stroke-width:0.5px;').attr("transform", "translate(-" + fontSize * 0.9 + ",-" + fontSize / 2 + ") scale(" + fontSize * 0.08 + ")")
+            .append("title").text(flagLegend[key])
+          break;
+        case 'triangle'://三角形
+          flag_g.append("polygon").attr("points", "7.5,0 15,12 0,12").attr("style", 'fill:' + config.flag_legend.color + '; stroke:black;stroke-width:0.5px;')
+            .attr("transform", "translate(0,0) scale(" + fontSize * 0.07 + ")")
+            .append("title").text(flagLegend[key])
+          break;
+        // default: //长方形
+        //   flag_g.append("rect").attr("width", fontSize + length).attr("height", fontSize).style("fill", config.flag_legend.color)
+        //     // .attr("x", 0).attr("y", -fontSize / 2)
+        //     .append("title").text(flagLegend[key])
+        //   break;
+      }
+      flag_g.append("text").attr("x", text_x).attr("y", text_y).text(flagLegend[key])
+        .attr("style", 'font-size: ' + fontSize * 0.9 + 'px;')
+        .attr("fill", "#999")
+    };
+    bgcHigth = bgcHigth + config.genus_legend.padding * 2;
+    flag_bgc.attr("width", 60).attr("height", bgcHigth);
+  }
+
+  //添加 random 图例
+  function random_fn() {
+    // 展开按钮
+    var randomLegendButton = d3.select('#chart_svg').append("g").attr("id", "random-legend-button").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i + fontSize * 0.3) + ',' + (config.genus_legend.y) + ')').attr("cursor", "pointer")
+      .on("click", function () {
+        var d = d3.select('#random-legend');
+        d3.select('#genus-legend').attr("display", "none");
+        d3.select('#flag-legend').attr("display", "none");
+
+        d3.select('#genus_path').attr("class", "");
+        d3.select('#flag_path').attr("class", "");
+        d3.select('#random_path').attr("class", "");
+
+        if (d.attr("display") === 'block') {
+          d.attr("display", "none");
+        } else {
+          d.attr("display", "block");
+          d3.select('#random_path').attr("class", "random_path");
+        }
+
+      });
+    randomLegendButton.append("text").text("random").attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
+    randomLegendButton.append("g").attr("transform", "translate(" + fontSize * 3.2 + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "random_path")
+
+    // 图例内容
+    var random_data = [], igObject = labelConfig.random.legend.color, bgcHigth = 0;
+    for (var key in igObject) {
+      bgcHigth = bgcHigth + config.genus_legend.space + fontSize
+      random_data.push({ name: igObject[key], color: key })
+    };
+    bgcHigth = bgcHigth + config.genus_legend.padding * 2;
+    var genus_box = d3.select('#chart_svg').append("g").attr("id", "random-legend").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i - 10) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none")
+
+    genus_box.append("rect").attr("width", 60).attr("height", bgcHigth).attr("fill", "rgba(255,255,255,.9)").attr("style", "stroke:rgba(0,0,0,.4);stroke-width: 0.3;") //背景
+
+    var genus_legend = genus_box.selectAll(".random-item").data(random_data).enter().append("g").attr("class", "random-item")
+      .attr("transform", function (item, i) {
+        return 'translate(' + config.genus_legend.padding + ',' + ((config.genus_legend.space + fontSize) * i + config.genus_legend.padding) + ')'
+      });
+
+    genus_legend.append("rect").attr("width", fontSize).attr("height", fontSize).attr("fill", function (d) {
+      return d.color
+    }).attr("style", "stroke:#aaa;stroke-width:0.5;")
+
+    genus_legend.append("text").attr("x", fontSize * 2).attr("y", fontSize / 2 + 4).text(function (obj) { return obj.name })
+      .attr("style", 'font-size: ' + fontSize * 0.9 + 'px;')
+      .attr("fill", "#999")
+  }
+
+
+
+
+
+
+  // 鼠标拖动初始化
+  DivMove("#flag-legend", "#flag-legend-button");
+  DivMove("#genus-legend", "#genus-legend-button");
+  DivMove("#random-legend", "#random-legend-button");
+
+  // 树和比例尺的偏移量
   var dom_g = document.querySelector('#chart_g');
   // var g_width = dom_g.getBoundingClientRect().width;
   var g_height = dom_g.getBoundingClientRect().height;
   chart_g.attr("transform", "translate(0," + ((svg_height - g_height) / 2) + ") scale(1)")
 
   var phylotreeContainer = document.querySelector('.phylotree-container');
-  d3.select(".tree-scale-bar").attr("transform", "translate(" + (config.leftOffset - 30) + "," + (phylotreeContainer.getBoundingClientRect().height - d3.layout.fontSize + 5) + ")")
+  d3.select(".tree-scale-bar").attr("transform", "translate(" + (config.leftOffset - 30) + "," + (phylotreeContainer.getBoundingClientRect().height - fontSize + 5) + ")")
 
   d3.select(".phylotree-container").attr("transform", "translate(" + config.leftOffset + ",-10)")
 }
@@ -379,10 +535,11 @@ function init_tree(tree_data, isUpdate) {
 
 // 初始化
 // init_tree(example_tree_text);
-// init_tree(example_tree_16s);
-init_tree(example_tree2);
+init_tree(example_tree_16s);
+// init_tree(example_tree2);
 // init_tree(iTOL_salmonella_new);
 // init_tree(fasttree);
+
 
 /************************* 交互部分 *****************************/
 
@@ -468,10 +625,19 @@ $("#next-stept").on("click", function (e) {
   }
 });
 
-
+// 保存.tree文件
 $("#save-file").on("click", function (e) {
   exportRaw('data.tree', treeData);
 });
+// 保存.svg文件
+$("#save-file-svg").on("click", function (e) {
+  var html = '<?xml version="1.0" standalone="no"?><!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">'
+  $("#chart_svg").attr("viewBox", "0 0 1030 1024")
+  exportRaw('file.svg', html + $("#svg-box").html());
+});
+
+
+
 function fakeClick(obj) {
   var ev = document.createEvent("MouseEvents");
   ev.initMouseEvent("click", true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
@@ -489,7 +655,7 @@ function exportRaw(name, data) {
 
 
 // 图片下载
-$("#save-img").on("click", function (e) {
+$("#save-img-jpg").on("click", function (e) {
   // covertSVG2Image(dom_svg, 'sdsc', svg_width, svg_height, 'png')
   //   backgroundColor - 使用给定的background 颜色创建 PNG。 默认为透明。
   // left - 指定viewbox位置的左边。 默认为 0.
@@ -504,3 +670,58 @@ $("#save-img").on("click", function (e) {
   // canvg - 如果传入了 canvg，它将用于将svg写入画布。 这将允许对 IE的支持
   saveSvgAsPng(d3.select('#chart_svg').node(), "diagram.jpg", { backgroundColor: "#ffffff" });
 });
+// $("#save-img").on("click", function (e) {
+//   saveSvgAsPng(d3.select('#chart_svg').node(), "diagram.jpg", { backgroundColor: "#ffffff" });
+// });
+
+
+
+// 鼠标拖动事件
+function DivMove(obj, ele) {
+
+  $(obj).mousedown(function (e) {
+    $(obj).css("cursor", "move");//改变鼠标指针样式
+    var x = e.offsetX; //获取div的当前X坐标
+    var y = e.offsetY;  //获取div的当前X坐标
+    var str = $(obj).attr("transform");
+    console.log(x, y);
+
+    var arr = str.slice(str.indexOf("(") + 1, str.indexOf(")")).split(',');
+    console.log(arr);
+
+    $(document).bind("mousemove", function (ev) {//鼠标移动事件
+      var ox = ev.offsetX - x;
+      var oy = ev.offsetY - y;
+      // console.log(ev.offsetX);
+      // console.log(ev.offsetY);
+
+
+      // $(ele).attr("transform", "translate(" + (arr[0] * 1 + ox) + "," + (oy + arr[1] * 1) + ")")
+      $(obj).attr("transform", "translate(" + (arr[0] * 1 + ox - 10) + "," + (oy + arr[1] * 1 + 7) + ")")
+      // $(obj).attr("transform")
+      // console.log($(obj).attr("transform",));
+      console.log(ox, oy);
+      // console.log(e.pageX, e.pageY);
+    });
+  })
+  $(document).mouseup(function () {
+    $(obj).css("cursor", "default");//还原鼠标指针样式
+    $(this).unbind("mousemove");
+  });
+}
+
+
+// 菜单项
+var menu = $("#right_click_menu");
+document.querySelector("#chart_svg").oncontextmenu = function (ev) {
+  var ev = ev || event;
+  var scrollTop =
+    document.documentElement.scrollTop || document.body.scrollTop;
+  menu.attr("style", "display:block;left:" + ev.clientX + "px;top:" + (ev.clientY + scrollTop) + "px");
+  //阻止默认事件
+  return false;
+};
+var app = document.querySelector('body');
+app.onclick = function () {
+  menu.attr("style", "display:none;");
+};

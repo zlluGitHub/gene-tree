@@ -21,90 +21,36 @@
 <body>
   <!-- 菜单部分 -->
   <div class='container' id="main_display">
-    <div class='row'>
-      <div class='col-md-12'>
-        <div class="btn-toolbar" role="toolbar">
-          <div class="btn-group">
-            <!-- <button type="button" class="btn btn-default btn-sm" data-direction='vertical' data-amount='1'
-              title="Expand vertical spacing">
-              <i class="fa fa-arrows-v"></i>
-            </button>
-            <button type="button" class="btn btn-default btn-sm" data-direction='vertical' data-amount='-1'
-              title="Compress vertical spacing">
-              <i class="fa  fa-compress fa-rotate-135"></i>
-            </button>
-            <button type="button" class="btn btn-default btn-sm" data-direction='horizontal' data-amount='1'
-              title="Expand horizonal spacing">
-              <i class="fa fa-arrows-h"></i>
-            </button>
-            <button type="button" class="btn btn-default btn-sm" data-direction='horizontal' data-amount='-1'
-              title="Compress horizonal spacing">
-              <i class="fa  fa-compress fa-rotate-45"></i>
-            </button> -->
-            <button type="button" class="btn btn-default btn-sm" id="sort_ascending"
-              title="Sort deepest clades to the bototm">
-              倒叙布局
-            </button>
-            <button type="button" class="btn btn-default btn-sm" id="sort_descending"
-              title="Sort deepsest clades to the top">
-              升序布局
-            </button>
-            <button type="button" class="btn btn-default btn-sm" id="sort_original" title="Restore original order">
-              默认布局
-            </button>
-          </div>
-          <!-- <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-default active btn-sm" id="linear">
-              <input type="radio" name="options" class="phylotree-layout-mode" autocomplete="off" checked
-                title="Layout left-to-right"> Linear
-            </label>
-            <label class="btn btn-default  btn-sm" id="radial">
-              <input type="radio" name="options" class="phylotree-layout-mode" autocomplete="off"
-                title="Layout radially"> Radial
-            </label>
-          </div> -->
-          <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm active" id="toggle_animation" title="Toggle animation">
-              动画按钮
-            </button>
-            </label>
-          </div>
-          <div class="btn-group" data-toggle="buttons">
-            <label class="btn btn-default active btn-sm" id="tip_left">
-              <input type="radio" class="phylotree-align-toggler" name="options-align" autocomplete="off" checked
-                title="Align tips labels to branches">
-              右对齐
-              </input>
-            </label>
-            <label class="btn btn-default btn-sm" id="tip_right">
-              <input type="radio" class="phylotree-align-toggler" name="options-align" autocomplete="off"
-                title="Align tips labels to the edge of the plot">
-              左对齐
-              </input>
-            </label>
-          </div>
-          <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm" id="prev-step">
-              上一步
-            </button>
-            <button type="button" class="btn btn-default btn-sm" id="next-stept">
-              下一步
-            </button>
-          </div>
-          <button type="button" class="btn btn-default btn-sm" id="reset">重置</button>
-          <button type="button" class="btn btn-default btn-sm" id="save-img">保存图片</button>
-          <button type="button" class="btn btn-default btn-sm" id="save-file">导出文件</button>
-        </div>
-      </div>
-    </div>
-
+  
     <!-- 图形部分 -->
-    <svg id="chart_svg" width="1000" height="1000">
+    <div id="svg-box">
+       <svg id="chart_svg" width="1000" height="1000">
       <!-- legend -->
       <g id="chart_l"></g>
       <!-- tree -->
       <g id="chart_g"></g>
     </svg>
+    </div>
+   
+
+    <!-- 右击菜单 -->
+    <!-- <ul id="right_click_menu" class="dropdown-menu" role="menu" style="display: block; position: absolute; left: 792px; top: 169px;"> -->
+    <ul id="right_click_menu" class="dropdown-menu">
+      <li id="reset"><a tabindex="-1">重置所有内容</a></li>
+      <li id="prev-step"><a tabindex="-1">上一步操作</a></li>
+      <li id="next-stept"><a tabindex="-1">下一步操作</a></li>
+      <li class="divider"></li>
+      <li id="tip_left"><a tabindex="-1">左对齐</a></li>
+      <li id="tip_right"><a tabindex="-1">右对齐</a></li>
+      <li class="divider"></li>
+      <li id="sort_original"><a tabindex="-1">默认布局</a></li>
+      <li id="sort_descending"><a tabindex="-1">升序布局</a></li>
+      <li id="sort_ascending"><a tabindex="-1">倒叙布局</a></li>
+      <li class="divider"></li>
+      <li id="save-img-jpg"><a tabindex="-1">导出图片（.jpg）</a></li>
+      <li id="save-file-svg"><a tabindex="-1">导出文件（.svg）</a></li>
+      <li id="save-file"><a tabindex="-1">导出文件（.tree）</a></li>
+    </ul>
 
     <!-- 编辑单个分支 -->
     <div class="modal-wrap" id="modal-input-wrap" style="display: none;">
