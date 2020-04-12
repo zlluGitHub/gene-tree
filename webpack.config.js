@@ -5,10 +5,15 @@ const webpack = require('webpack');   //导入webpack模块
 module.exports = {
   mode: 'production',
   // entry: path.resolve(__dirname, 'src', 'main.js'),
-  entry: ["./src/main.js","./src/js/own.js"], //入口文件,从项目根目录指定
+  // entry: ["./src/main.js","./src/js/own.js"], //入口文件,从项目根目录指定
+  entry: {
+    phylotree:__dirname + '/src/main.js',
+    // main:__dirname + '/src/js/own.js',
+},
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'phylotree.min.js'
+    filename: './js/[name].min.js',
+    // filename: './js/phylotree.min.js'
   },
   externals: [
     'd3',
