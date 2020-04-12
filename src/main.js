@@ -1,3 +1,4 @@
+
 const parseString = require('xml2js').parseString;
 (function () {
   var d3_layout_phylotree_event_id = "d3.layout.phylotree.event",
@@ -695,8 +696,8 @@ const parseString = require('xml2js').parseString;
           .tickFormat(function (d) {
             if (d === 0) {
               return "";
-            }
-            return scaleTickFormatter(d);
+            };
+            return (scaleTickFormatter(d)*1).toFixed(2);
           });
 
         if (phylotree.radial()) {
@@ -719,8 +720,7 @@ const parseString = require('xml2js').parseString;
         //_extentsconsole.log (scale.domain(), scale.range());
       } else {
         draw_scale_bar = null;
-      }
-
+      };
       return phylotree;
     };
 
@@ -1036,10 +1036,10 @@ const parseString = require('xml2js').parseString;
                   }
                 }
                 nodeItem(node);
-                console.log(node);
+                // console.log(node);
 
-                console.log(markStart);
-                console.log(markEnd);
+                // console.log(markStart);
+                // console.log(markEnd);
                 // console.log(inData.slice(inData.indexOf(markStart), inData.indexOf(markEnd) + markEnd.length));
 
                 var after = inData.slice(inData.indexOf(markEnd) + markEnd.length, inData.length);
@@ -1089,7 +1089,7 @@ const parseString = require('xml2js').parseString;
                 };
 
 
-                console.log(depth);
+                // console.log(depth);
 
                 if ((isBefore === ',' && isAfter === ')') || (isBefore === ',' && isAfter === ',')) {
                   inData = before.slice(0, before.length - 1) + after
@@ -1110,23 +1110,23 @@ const parseString = require('xml2js').parseString;
                 } else if (isBefore === '(' && isAfter === ')') {
 
                   if (node.children && node.children.length === 1) {
-                    console.log(depth, '(1)');
+                    // console.log(depth, '(1)');
 
                     if (node.parent && node.parent.children.length === 1) {
-                      console.log(depth, '(2)');
+                      // console.log(depth, '(2)');
                       inData = before.slice(0, before.length - depth - 1) + after.slice(1, after.length)
                     } else {
-                      console.log(depth, '(3)');
+                      // console.log(depth, '(3)');
                       inData = before.slice(0, before.length - depth - 2) + after;
                     }
                   } else {
-                    console.log(depth, '(4)');
+                    // console.log(depth, '(4)');
 
                     if (node.parent && node.parent.children.length === 1) {
-                      console.log(depth, '(5)');
+                      // console.log(depth, '(5)');
                       inData = before.slice(0, before.length - depth - 1) + after.slice(1, after.length)
                     } else {
-                      console.log(depth, '(6)');
+                      // console.log(depth, '(6)');
                       inData = before.slice(0, before.length - depth - 2) + after;
                     }
 
@@ -1138,11 +1138,11 @@ const parseString = require('xml2js').parseString;
                 }
 
 
-                console.log(before);
-                console.log(after);
-                console.log(isBefore);
-                console.log(isAfter);
-                console.log(inData);
+                // console.log(before);
+                // console.log(after);
+                // console.log(isBefore);
+                // console.log(isAfter);
+                // console.log(inData);
 
 
                 init_tree(inData);
@@ -2843,6 +2843,7 @@ const parseString = require('xml2js').parseString;
           .attr("dy", function (d) {
             return shown_font_size * 0.33;
           })
+          .attr("class", "label-name")
           .text(function (d) {
             return node_label(d);
           })
@@ -2868,8 +2869,7 @@ const parseString = require('xml2js').parseString;
             .attr("text-anchor", "start")
             .attr("transform", function (d) {
               // console.log(d3_phylotree_svg_translate(phylotree.shift_tip(d)));
-              // console.log(d);
-
+          
               if (options["layout"] == "right-to-left") {
                 return d3_phylotree_svg_translate([-20, 0]);
               }
@@ -3588,3 +3588,4 @@ const parseString = require('xml2js').parseString;
   }
 
 }.call(this));
+// require('./js/own.js');

@@ -4,37 +4,29 @@
 <head>
   <meta charset="utf-8">
 
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap-theme.min.css">
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-  <!-- <link href="http://veg.github.io/phylotree.js/phylotree.css" rel="stylesheet"> -->
-  <link rel="stylesheet" href="./phylotree.css">
-
-  <script src="http://code.jquery.com/jquery.js"></script>
-  <script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-  <script src="http://d3js.org/d3.v3.min.js"></script>
-  <script src="./phylotree.js"></script>
+  <link rel="stylesheet" href="./css/bootstrap.min.css">
+  <link rel="stylesheet" href="./css/phylotree.css">
+  <script src="./js/jquery.js"></script>
+  <script src="./js/d3.v3.min.js"></script>
+  <script src="./js/jspdf.debug.js"></script>
   <script src="./js/saveSvgAsPng.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js" charset="utf-8"></script>
+  <script src="./js/underscore-min.js"></script>
 </head>
 
 <body>
-  <!-- 菜单部分 -->
-  <div class='container' id="main_display">
-  
+  <!-- <div class="chart-warp" style="width:1000px;height:1000px;overflow:auto;"> 滚动条-->
+  <div class="chart-warp">
     <!-- 图形部分 -->
     <div id="svg-box">
-       <svg id="chart_svg" width="1000" height="1000">
-      <!-- legend -->
-      <g id="chart_l"></g>
-      <!-- tree -->
-      <g id="chart_g"></g>
-    </svg>
+      <!-- <svg id="chart_svg" width="1000" height="1000"> -->
+      <svg id="chart_svg">
+        <!-- legend -->
+        <g id="chart_l"></g>
+        <!-- tree -->
+        <g id="chart_g"></g>
+      </svg>
     </div>
-   
-
     <!-- 右击菜单 -->
-    <!-- <ul id="right_click_menu" class="dropdown-menu" role="menu" style="display: block; position: absolute; left: 792px; top: 169px;"> -->
     <ul id="right_click_menu" class="dropdown-menu">
       <li id="reset"><a tabindex="-1">重置所有内容</a></li>
       <li id="prev-step"><a tabindex="-1">上一步操作</a></li>
@@ -47,12 +39,13 @@
       <li id="sort_descending"><a tabindex="-1">升序布局</a></li>
       <li id="sort_ascending"><a tabindex="-1">倒叙布局</a></li>
       <li class="divider"></li>
+      <li id="save-img-pdf"><a tabindex="-1">导出图片（.pdf）</a></li>
       <li id="save-img-jpg"><a tabindex="-1">导出图片（.jpg）</a></li>
       <li id="save-file-svg"><a tabindex="-1">导出文件（.svg）</a></li>
       <li id="save-file"><a tabindex="-1">导出文件（.tree）</a></li>
     </ul>
 
-    <!-- 编辑单个分支 -->
+    <!-- 添加分支 -->
     <div class="modal-wrap" id="modal-input-wrap" style="display: none;">
       <div class="modal-box">
         <div class="modal-title">
@@ -89,10 +82,15 @@
         </div>
       </div>
     </div>
+    <!-- loading -->
+    <div class="loading-box" v-show="isLoading">
+      <img src="./img/loading.gif" />
+    </div>
   </div>
 
   <script src="./js/data.js"></script>
-  <script src="./js/main.js"></script>
+  <!-- <script src="./phylotree.js"></script> -->
+  <!-- <script src="./js/own.js"></script> -->
 </body>
 
 </html>
