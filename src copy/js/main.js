@@ -37,7 +37,7 @@ function init_tree(tree_data, isUpdate) {
     },
     genus_legend: {
       show: false,
-      distance: 50, //label间距
+      distance: 35, //label间距
       x: 0,
       y: 15,
       space: 5,
@@ -66,13 +66,12 @@ function init_tree(tree_data, isUpdate) {
   var chart_l = d3.select('#chart_l');
   var cl = labelConfig.nodeLength;
   var scale = (cl[1] - cl[0]) / 5;
-  var colorArr = labelConfig.nodeColor&&labelConfig.nodeColor.length?labelConfig.nodeColor:["#AE271C","#F93529","#F96D29","#FFA503","#FFE700"];
   var legendArr = [
-    { index: 'leg1', name: '(' + (cl[0] + scale * 4).toFixed(2) + '~' + (cl[0] + scale * 5).toFixed(2) + ']', color: colorArr[0], start: (cl[0] + scale * 4).toFixed(2), end: (cl[0] + scale * 5).toFixed(2) },
-    { index: 'leg2', name: '(' + (cl[0] + scale * 3).toFixed(2) + '~' + (cl[0] + scale * 4).toFixed(2) + ']', color:  colorArr[1], start: (cl[0] + scale * 3).toFixed(2), end: cl[0] + scale * 4 },
-    { index: 'leg3', name: '(' + (cl[0] + scale * 2).toFixed(2) + '~' + (cl[0] + scale * 3).toFixed(2) + ']', color:  colorArr[2], start: (cl[0] + scale * 2).toFixed(2), end: (cl[0] + scale * 3).toFixed(1) },
-    { index: 'leg4', name: '(' + (cl[0] + scale * 1).toFixed(2) + '~' + (cl[0] + scale * 2).toFixed(2) + ']', color:  colorArr[3], start: (cl[0] + scale * 1).toFixed(2), end: cl[0] + scale * 2 },
-    { index: 'leg5', name: '[' + (cl[0]).toFixed(2) + '~' + (cl[0] + scale * 1).toFixed(2) + ']', color:  colorArr[4], start: (cl[0] + scale * 1).toFixed(2), end: (scale * 1).toFixed(2) },
+    { index: 'leg1', name: '(' + (cl[0] + scale * 4).toFixed(2) + '~' + (cl[0] + scale * 5).toFixed(2) + ']', color: "#AE271C", start: (cl[0] + scale * 4).toFixed(2), end: (cl[0] + scale * 5).toFixed(2) },
+    { index: 'leg2', name: '(' + (cl[0] + scale * 3).toFixed(2) + '~' + (cl[0] + scale * 4).toFixed(2) + ']', color: "#F93529", start: (cl[0] + scale * 3).toFixed(2), end: cl[0] + scale * 4 },
+    { index: 'leg3', name: '(' + (cl[0] + scale * 2).toFixed(2) + '~' + (cl[0] + scale * 3).toFixed(2) + ']', color: "#F96D29", start: (cl[0] + scale * 2).toFixed(2), end: (cl[0] + scale * 3).toFixed(1) },
+    { index: 'leg4', name: '(' + (cl[0] + scale * 1).toFixed(2) + '~' + (cl[0] + scale * 2).toFixed(2) + ']', color: "#FFA503", start: (cl[0] + scale * 1).toFixed(2), end: cl[0] + scale * 2 },
+    { index: 'leg5', name: '[' + (cl[0]).toFixed(2) + '~' + (cl[0] + scale * 1).toFixed(2) + ']', color: "#FFE700", start: (cl[0] + scale * 1).toFixed(2), end: (scale * 1).toFixed(2) },
   ];
 
   var isClickArr = [], each = null;
@@ -159,7 +158,7 @@ function init_tree(tree_data, isUpdate) {
   });
 
   tree(d3.layout.newick_parser(treeData));
-  tree.spacing_x(18).spacing_y(35);
+  tree.spacing_x(15).spacing_y(35);
 
   var maximum_length = 0;
   tree.traverse_and_compute(function (node) {
@@ -175,8 +174,7 @@ function init_tree(tree_data, isUpdate) {
       var move_past_label = maximum_length * 0.57 * font_size;
       var x_shift = tree.shift_tip(node_data)[0] + move_past_label;
       var node_item = configData[node_data.name], i = 0;
-
-      // 第一种图例
+      // element.select('.qweqw')
       var identity_genus = node_item.identity_genus ? node_item.identity_genus : {};
       var flag = node_item.flag ? node_item.flag : {};
       var random = node_item.random ? node_item.random : {};
@@ -188,94 +186,34 @@ function init_tree(tree_data, isUpdate) {
       element.selectAll('circle').remove();
       element.selectAll('polygon').remove();
 
-      if (labelConfig.identity_genus && labelConfig.identity_genus.position === 1) {
+      if (labelConfig.identity_genus.position === 1) {
         shape_select(element, identity_genus, x_shift, font_size, i, 'genus')
         i = i + 1;
-      } else if (labelConfig.flag && labelConfig.flag.position === 1) {
+      } else if (labelConfig.flag.position === 1) {
         shape_select(element, flag, x_shift, font_size, i, 'flag')
         i = i + 1;
-      } else if (labelConfig.random && labelConfig.random.position === 1) {
+      } else if (labelConfig.random.position === 1) {
         shape_select(element, random, x_shift, font_size, i, 'random')
         i = i + 1;
       }
 
-      if (labelConfig.identity_genus && labelConfig.identity_genus.position === 2) {
+      if (labelConfig.identity_genus.position === 2) {
         shape_select(element, identity_genus, x_shift, font_size, i, 'genus')
         i = i + 1;
-      } else if (labelConfig.flag && labelConfig.flag.position === 2) {
+      } else if (labelConfig.flag.position === 2) {
         shape_select(element, flag, x_shift, font_size, i, 'flag')
         i = i + 1;
-      } else if (labelConfig.random && labelConfig.random.position === 2) {
+      } else if (labelConfig.random.position === 2) {
         shape_select(element, random, x_shift, font_size, i, 'random')
         i = i + 1;
       }
 
-      if (labelConfig.identity_genus && labelConfig.identity_genus.position === 3) {
+      if (labelConfig.identity_genus.position === 3) {
         shape_select(element, identity_genus, x_shift, font_size, i, 'genus')
-      } else if (labelConfig.flag && labelConfig.flag.position === 3) {
+      } else if (labelConfig.flag.position === 3) {
         shape_select(element, flag, x_shift, font_size, i, 'flag')
-      } else if (labelConfig.random && labelConfig.random.position === 3) {
+      } else if (labelConfig.random.position === 3) {
         shape_select(element, random, x_shift, font_size, i, 'random')
-      }
-
-
-      // 第二种图例
-      var identity = node_item.identity ? node_item.identity : {};
-      var country = node_item.country ? node_item.country : {};
-      var collectionDate = node_item.collectionDate ? node_item.collectionDate : {};
-      var host = node_item.host ? node_item.host : {};
-
-
-      if (labelConfig.identity && labelConfig.identity.position === 1) {
-        shape_select(element, identity, x_shift, font_size, i, 'identity')
-        i = i + 1;
-      } else if (labelConfig.country && labelConfig.country.position === 1) {
-        shape_select(element, country, x_shift, font_size, i, 'country')
-        i = i + 1;
-      } else if (labelConfig.collectionDate && labelConfig.collectionDate.position === 1) {
-        shape_select(element, collectionDate, x_shift, font_size, i, 'collectionDate')
-        i = i + 1;
-      } else if (labelConfig.host && labelConfig.host.position === 1) {
-        shape_select(element, host, x_shift, font_size, i, 'host')
-        i = i + 1;
-      }
-
-      if (labelConfig.identity && labelConfig.identity.position === 2) {
-        shape_select(element, identity, x_shift, font_size, i, 'identity')
-        i = i + 1;
-      } else if (labelConfig.country && labelConfig.country.position === 2) {
-        shape_select(element, country, x_shift, font_size, i, 'country')
-        i = i + 1;
-      } else if (labelConfig.collectionDate && labelConfig.collectionDate.position === 2) {
-        shape_select(element, collectionDate, x_shift, font_size, i, 'collectionDate')
-        i = i + 1;
-      } else if (labelConfig.host && labelConfig.host.position === 2) {
-        shape_select(element, host, x_shift, font_size, i, 'host')
-        i = i + 1;
-      }
-
-      if (labelConfig.identity && labelConfig.identity.position === 3) {
-        shape_select(element, identity, x_shift, font_size, i, 'identity')
-        i = i + 1;
-      } else if (labelConfig.country && labelConfig.country.position === 3) {
-        shape_select(element, country, x_shift, font_size, i, 'country')
-        i = i + 1;
-      } else if (labelConfig.collectionDate && labelConfig.collectionDate.position === 3) {
-        shape_select(element, collectionDate, x_shift, font_size, i, 'collectionDate')
-        i = i + 1;
-      } else if (labelConfig.host && labelConfig.host.position === 3) {
-        shape_select(element, host, x_shift, font_size, i, 'host')
-        i = i + 1;
-      }
-
-      if (labelConfig.identity && labelConfig.identity.position === 4) {
-        shape_select(element, identity, x_shift, font_size, i, 'identity')
-      } else if (labelConfig.country && labelConfig.country.position === 4) {
-        shape_select(element, country, x_shift, font_size, i, 'country')
-      } else if (labelConfig.collectionDate && labelConfig.collectionDate.position === 4) {
-        shape_select(element, collectionDate, x_shift, font_size, i, 'collectionDate')
-      } else if (labelConfig.host && labelConfig.host.position === 4) {
-        shape_select(element, host, x_shift, font_size, i, 'host')
       }
     }
   });
@@ -285,13 +223,13 @@ function init_tree(tree_data, isUpdate) {
     if (item.label) {
       var fill = item.color ? item.color : '#ccc';
       var range = labelConfig.identity_genus ? labelConfig.identity_genus.length : [0, 1];
-      var length = item.length ? ((item.length - range[0]) / (range[1] - range[0]) * (distance - 12)) : 0;
+      var length = item.length ? ((item.length - range[0]) / (range[1] - range[0]) * (distance-12)) : 0;
       var Xoffset = x_shift + distance * i;
       var yoffset = -font_size * 0.5;
       switch (item.shape) {
-        case 'square'://正方形
-          element.append("rect").attr("width", font_size * 0.9).attr("height", font_size * 0.9).style("fill", fill)
-            .attr("transform", "translate(" + (Xoffset + font_size + font_size * 0.15) + "," + (yoffset + font_size * 0.15) + ") scale(1)")
+        case 'square'://长方形
+          element.append("rect").attr("width", font_size*1.1 ).attr("height", font_size*0.7).style("fill", fill)
+            .attr("transform", "translate(" + Xoffset + "," + (yoffset+font_size*0.15) + ") scale(1)")
             .attr("cursor", "pointer")
             .append("title").text(item.label)
           // .on("mouseover", function (d, i) {
@@ -307,25 +245,19 @@ function init_tree(tree_data, isUpdate) {
           break;
         case 'triangle'://三角形
           element.append("polygon").attr("points", "7.5,0 15,12 0,12").attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
-            .attr("transform", "translate(" + (Xoffset + font_size) + "," + yoffset + ") scale(" + font_size * 0.08 + ")")
+            .attr("transform", "translate(" + Xoffset + "," + yoffset + ") scale(" + font_size * 0.08 + ")")
             .attr("cursor", "pointer")
             .append("title").text(item.label)
           break;
         case 'circle'://圆形
           element.append("circle").attr("r", font_size * 0.5).attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
-            .attr("transform", "translate(" + (Xoffset + font_size * 1.5 + 1) + "," + (yoffset + font_size * 0.5) + ") scale(1)")
+            .attr("transform", "translate(" + (Xoffset + font_size * 0.5+1) + "," + (yoffset + font_size * 0.5) + ") scale(1)")
             .attr("cursor", "pointer")
             .append("title").text(item.label)
           break;
         case 'rhombus'://菱形
           element.append("polygon").attr("points", "10,10 17.5,5 25,10 17.5,15").attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
-            .attr("transform", "translate(" + (Xoffset) + "," + (yoffset - font_size * 0.4) + ") scale(" + font_size * 0.09 + ")")
-            .attr("cursor", "pointer")
-            .append("title").text(item.label)
-          break;
-        case 'star'://六角星
-          element.append("polygon").attr("points", "10,0 16,18 1,6 19,6 4,18").attr("style", 'fill:' + fill + '; stroke:black;stroke-width:0.5px;')
-            .attr("transform", "translate(" + (Xoffset + font_size) + "," + yoffset + ") scale(" + font_size * 0.06 + ")")
+            .attr("transform", "translate(" + (Xoffset - font_size) + "," + (yoffset - font_size * 0.4) + ") scale(" + font_size * 0.09 + ")")
             .attr("cursor", "pointer")
             .append("title").text(item.label)
           break;
@@ -334,7 +266,7 @@ function init_tree(tree_data, isUpdate) {
           // var width = font_size + 30;
           var width = length === 0 ? font_size : length;
           element.append("rect").attr("width", width).attr("height", font_size).style("fill", fill)
-            .attr("transform", "translate(" + (Xoffset + font_size) + "," + yoffset + ") scale(1)")
+            .attr("transform", "translate(" + Xoffset + "," + yoffset + ") scale(1)")
             .attr("cursor", "pointer")
             .append("title").text(item.label)
           break;
@@ -384,11 +316,7 @@ function init_tree(tree_data, isUpdate) {
   chart_g.attr("transform", "translate(" + fontSize * 10 + "," + fontSize * 2 + ") scale(1)")
   d3.select(".tree-scale-bar").attr("transform", "translate(-" + fontSize + "," + (g_height + fontSize * 0.2) + ")")
 
-
-
-
   // 添加图例
-  var isTow = labelConfig.country && labelConfig.collectionDate && labelConfig.host ? true : false;
   // 刷新时删除图例，防止重复出现
   d3.select("#genus-legend").remove();
   d3.select("#flag-legend").remove();
@@ -401,97 +329,45 @@ function init_tree(tree_data, isUpdate) {
     var elewidth = ele.getBoundingClientRect().width;
     labelLength = labelLength < elewidth ? elewidth : labelLength
   });
-
   var leftOffsetObj = document.querySelector('.domain').getBoundingClientRect();
-  var leftOffset = leftOffsetObj.width + labelLength + fontSize * 10 + config.genus_legend.x;
-  leftOffset = isTow ? leftOffset + fontSize * 1.5 : leftOffset;
+  var leftOffset = leftOffsetObj.width + labelLength + fontSize * 11;
   // 根据配置进行渲染
   var i = 0;
-  if (!isTow) {
-    if (labelConfig.identity_genus && labelConfig.identity_genus.position === 1) {
-      identity_genus_fn(labelConfig.identity_genus, "genus")
-      i = i + 1;
-    } else if (labelConfig.flag && labelConfig.flag.position === 1) {
-      flag_fn(labelConfig.flag, "flag")
-      i = i + 1;
-    } else if (labelConfig.random && labelConfig.random.position === 1) {
-      random_fn(labelConfig.random, "random")
-      i = i + 1;
-    }
-
-    if (labelConfig.identity_genus && labelConfig.identity_genus.position === 2) {
-      identity_genus_fn(labelConfig.identity_genus, "genus")
-      i = i + 1;
-    } else if (labelConfig.flag && labelConfig.flag.position === 2) {
-      flag_fn(labelConfig.flag, "flag")
-      i = i + 1;
-    } else if (labelConfig.random && labelConfig.random.position === 2) {
-      random_fn(labelConfig.random, "random")
-      i = i + 1;
-    }
-
-    if (labelConfig.identity_genus && labelConfig.identity_genus.position === 3) {
-      identity_genus_fn(labelConfig.identity_genus, "genus")
-    } else if (labelConfig.flag && labelConfig.flag.position === 3) {
-      flag_fn(labelConfig.flag, "flag")
-    } else if (labelConfig.random && labelConfig.random.position === 3) {
-      random_fn(labelConfig.random, "random")
-    }
-  } else {
-    // 第二种图例
-    if (labelConfig.collectionDate && labelConfig.collectionDate.position === 1) {
-      identity_genus_fn(labelConfig.collectionDate, "time")
-      i = i + 1;
-    } else if (labelConfig.country && labelConfig.country.position === 1) {
-      flag_fn(labelConfig.country, "country")
-      i = i + 1;
-    } else if (labelConfig.host && labelConfig.host.position === 1) {
-      random_fn(labelConfig.host, "host")
-      i = i + 1;
-    } else if (labelConfig.identity && labelConfig.identity.position === 1) {
-      i = i + 1;
-    }
-
-    if (labelConfig.collectionDate && labelConfig.collectionDate.position === 2) {
-      identity_genus_fn(labelConfig.collectionDate, "time")
-      i = i + 1;
-    } else if (labelConfig.country && labelConfig.country.position === 2) {
-      flag_fn(labelConfig.country, "country")
-      i = i + 1;
-    } else if (labelConfig.host && labelConfig.host.position === 2) {
-      random_fn(labelConfig.host, "host")
-      i = i + 1;
-    } else if (labelConfig.identity && labelConfig.identity.position === 2) {
-      i = i + 1;
-    }
-
-    if (labelConfig.collectionDate && labelConfig.collectionDate.position === 3) {
-      identity_genus_fn(labelConfig.collectionDate, "time")
-      i = i + 1;
-    } else if (labelConfig.country && labelConfig.country.position === 3) {
-      flag_fn(labelConfig.country, "country")
-      i = i + 1;
-    } else if (labelConfig.host && labelConfig.host.position === 3) {
-      random_fn(labelConfig.host, "host")
-      i = i + 1;
-    } else if (labelConfig.identity && labelConfig.identity.position === 3) {
-      i = i + 1;
-    }
-
-    if (labelConfig.collectionDate && labelConfig.collectionDate.position === 4) {
-      identity_genus_fn(labelConfig.collectionDate, "time")
-    } else if (labelConfig.country && labelConfig.country.position === 4) {
-      flag_fn(labelConfig.country, "country")
-    } else if (labelConfig.host && labelConfig.host.position === 4) {
-      random_fn(labelConfig.host, "host")
-    }
+  if (labelConfig.identity_genus.position === 1) {
+    identity_genus_fn()
+    i = i + 1;
+  } else if (labelConfig.flag.position === 1) {
+    flag_fn()
+    i = i + 1;
+  } else if (labelConfig.random.position === 1) {
+    random_fn()
+    i = i + 1;
   }
 
+  if (labelConfig.identity_genus.position === 2) {
+    identity_genus_fn()
+    i = i + 1;
+  } else if (labelConfig.flag.position === 2) {
+    flag_fn()
+    i = i + 1;
+  } else if (labelConfig.random.position === 2) {
+    random_fn()
+    i = i + 1;
+  }
+
+  if (labelConfig.identity_genus.position === 3) {
+    identity_genus_fn()
+  } else if (labelConfig.flag.position === 3) {
+    flag_fn()
+  } else if (labelConfig.random.position === 3) {
+    random_fn()
+  }
+
+
   //添加 identity_genus 图例
-  function identity_genus_fn(dataObj, title) {
+  function identity_genus_fn() {
     // 展开按钮
-    leftOffset1 = leftOffset + fontSize * 2.5;
-    var genusLegendButton = d3.select('#chart_svg').append("g").attr("id", "genus-legend-button").attr("transform", 'translate(' + (leftOffset1 + distance * i) + ',' + config.genus_legend.y + ')').attr("cursor", "pointer")
+    var genusLegendButton = d3.select('#chart_svg').append("g").attr("id", "genus-legend-button").attr("transform", 'translate(' + leftOffset + ',' + config.genus_legend.y + ')').attr("cursor", "pointer")
       .on("click", function () {
         var d = d3.select('#genus-legend');
         d3.select('#flag-legend').attr("display", "none");
@@ -507,22 +383,21 @@ function init_tree(tree_data, isUpdate) {
           d.attr("display", "block");
           d3.select('#genus_path').attr("class", "genus_path");;
         }
+
       });
-    var awg = isTow ? fontSize * 1.8 : fontSize * 2.5;
-    genusLegendButton.append("text").text(title).attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
-    genusLegendButton.append("g").attr("transform", "translate(" + awg + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "genus_path")
+    genusLegendButton.append("text").text("genus").attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
+    genusLegendButton.append("g").attr("transform", "translate(" + fontSize * 2.6 + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "genus_path")
 
     // 图例内容
-    var identity_genus_data = [], igObject = dataObj.legend.color, bgcHigth = 0;
+    var identity_genus_data = [], igObject = labelConfig.identity_genus.legend.color, bgcHigth = 0;
     for (var key in igObject) {
       bgcHigth = bgcHigth + config.genus_legend.space + fontSize
       identity_genus_data.push({ name: igObject[key], color: key })
     };
     bgcHigth = bgcHigth + config.genus_legend.padding * 2;
-    var genus_box = d3.select('#chart_svg').append("g").attr("id", "genus-legend").attr("transform", 'translate(' + (leftOffset1 - fontSize * 4 + distance * i) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none")
+    var genus_box = d3.select('#chart_svg').append("g").attr("id", "genus-legend").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i - 50) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none")
 
-    var width_bgc = isTow ? 110 : 170;
-    genus_box.append("rect").attr("width", width_bgc).attr("height", bgcHigth).attr("style", "fill:rgba(255,255,255,.9);stroke:rgba(0,0,0,.4);stroke-width: 0.3;") //背景
+    genus_box.append("rect").attr("width", 170).attr("height", bgcHigth).attr("style", "fill:rgba(255,255,255,.9);stroke:rgba(0,0,0,.4);stroke-width: 0.3;") //背景
 
     var genus_legend = genus_box.selectAll(".genus-item").data(identity_genus_data).enter().append("g").attr("class", "genus-item")
       .attr("transform", function (item, i) {
@@ -536,14 +411,14 @@ function init_tree(tree_data, isUpdate) {
     genus_legend.append("text").attr("x", fontSize * 2).attr("y", fontSize / 2 + 4).text(function (obj) { return obj.name })
       .attr("style", 'font-size: ' + fontSize * 0.9 + 'px;')
       .attr("fill", "#999")
+
   }
 
 
   //添加 flag 图例
-  function flag_fn(dataObj, title) {
+  function flag_fn() {
     // 展开按钮
-    leftOffset2 = leftOffset + fontSize * 2.5;
-    var flagLegendButton = d3.select('#chart_svg').append("g").attr("id", "flag-legend-button").attr("transform", 'translate(' + (leftOffset2 + distance * i) + ',' + config.genus_legend.y + ')').attr("cursor", "pointer")
+    var flagLegendButton = d3.select('#chart_svg').append("g").attr("id", "flag-legend-button").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + fontSize * (i+3) ) + ',' + config.genus_legend.y + ')').attr("cursor", "pointer")
       .on("click", function () {
         var d = d3.select('#flag-legend');
         d3.select('#genus-legend').attr("display", "none");
@@ -563,21 +438,20 @@ function init_tree(tree_data, isUpdate) {
         // stopDefault(e);
         // stopBubble(e);
       });
-    var awg = isTow ? fontSize * 3 : fontSize * 1.5
-    flagLegendButton.append("text").text(title).attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
-    flagLegendButton.append("g").attr("transform", "translate(" + awg + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "flag_path")
+    flagLegendButton.append("text").text("flag").attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
+    flagLegendButton.append("g").attr("transform", "translate(" + fontSize * 1.6 + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "flag_path")
 
     // 图例内容
-    var flagLegend = dataObj.legend.shape, bgcHigth = 0;
-    var flag_box = d3.select('#chart_svg').append("g").attr("id", "flag-legend").attr("transform", 'translate(' + (leftOffset2 + distance * i) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none");
+    var flagLegend = labelConfig.flag.legend.shape, bgcHigth = 0;
+    var flag_box = d3.select('#chart_svg').append("g").attr("id", "flag-legend").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i - 10) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none");
     var flag_bgc = flag_box.insert("rect").attr("fill", "rgba(255,255,255,.9)").attr("style", "stroke:rgba(0,0,0,.4);stroke-width: 0.3;") //背景
     for (var key in flagLegend) {
       bgcHigth = bgcHigth + config.genus_legend.space + fontSize;
       var flag_g = flag_box.append("g").attr("class", "flag-item").attr("transform", 'translate(' + config.genus_legend.padding + ',' + bgcHigth + ')');
       var text_x = fontSize * 2, text_y = fontSize / 2 + 4;
       switch (key) {
-        case 'square'://正方形
-          flag_g.append("rect").attr("width", fontSize * 0.9).attr("height", fontSize * 0.9).attr("style", 'fill:' + config.flag_legend.color + '; stroke:black;stroke-width:0.5px;')
+        case 'square'://长方形
+          flag_g.append("rect").attr("width", fontSize).attr("height", fontSize * 0.7).attr("style", 'fill:' + config.flag_legend.color + '; stroke:black;stroke-width:0.5px;')
             .append("title").text(flagLegend[key])
           break;
         case 'circle'://圆形
@@ -589,12 +463,6 @@ function init_tree(tree_data, isUpdate) {
         case 'rhombus'://菱形
           text_y = text_y - 1
           flag_g.append("polygon").attr("points", "10,10 17.5,5 25,10 17.5,15").attr("style", 'fill:' + config.flag_legend.color + '; stroke:black;stroke-width:0.5px;').attr("transform", "translate(-" + fontSize * 0.9 + ",-" + fontSize / 2 + ") scale(" + fontSize * 0.08 + ")")
-            .append("title").text(flagLegend[key])
-          break;
-        case 'star'://六角星
-          text_y = text_y - fontSize * 0.7
-          flag_g.append("polygon").attr("points", "10,0 16,18 1,6 19,6 4,18").attr("style", 'fill:' + config.flag_legend.color + '; stroke:black;stroke-width:0.5px;')
-            .attr("transform", "translate(-" + fontSize * 0.2 + ",-" + fontSize * 0.8 + ") scale(" + fontSize * 0.06 + ")")
             .append("title").text(flagLegend[key])
           break;
         case 'triangle'://三角形
@@ -613,15 +481,13 @@ function init_tree(tree_data, isUpdate) {
         .attr("fill", "#999")
     };
     bgcHigth = bgcHigth + config.genus_legend.padding * 2;
-    var width_bgc = isTow ? 80 : 70;
-    flag_bgc.attr("width", width_bgc).attr("height", bgcHigth);
+    flag_bgc.attr("width", 60).attr("height", bgcHigth);
   }
 
   //添加 random 图例
-  function random_fn(dataObj, title) {
+  function random_fn() {
     // 展开按钮
-    leftOffset3 = leftOffset + fontSize * 2.5;
-    var randomLegendButton = d3.select('#chart_svg').append("g").attr("id", "random-legend-button").attr("transform", 'translate(' + (leftOffset3 + distance * i) + ',' + (config.genus_legend.y) + ')').attr("cursor", "pointer")
+    var randomLegendButton = d3.select('#chart_svg').append("g").attr("id", "random-legend-button").attr("transform", 'translate(' +  (leftOffset + config.genus_legend.x + fontSize * (i+4.5) ) + ',' + (config.genus_legend.y) + ')').attr("cursor", "pointer")
       .on("click", function () {
         var d = d3.select('#random-legend');
         d3.select('#genus-legend').attr("display", "none");
@@ -639,22 +505,19 @@ function init_tree(tree_data, isUpdate) {
         }
 
       });
-    var awg = isTow ? fontSize * 1.8 : fontSize * 3.2
-    randomLegendButton.append("text").text(title).attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
-    randomLegendButton.append("g").attr("transform", "translate(" + awg + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "random_path")
+    randomLegendButton.append("text").text("random").attr("style", 'font-size: ' + fontSize * 0.9 + 'px;').attr("fill", "#666")
+    randomLegendButton.append("g").attr("transform", "translate(" + fontSize * 3.2 + ",-6)").append("svg").attr("width", "8").attr("height", "8").attr("viewBox", "0 0 1792 1792").append("path").attr("d", "M1683 808l-742 741q-19 19-45 19t-45-19l-742-741q-19-19-19-45.5t19-45.5l166-165q19-19 45-19t45 19l531 531 531-531q19-19 45-19t45 19l166 165q19 19 19 45.5t-19 45.5z").attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;').attr("fill", "#666").attr("id", "random_path")
 
     // 图例内容
-    var random_data = [], igObject = dataObj.legend.color, bgcHigth = 0;
+    var random_data = [], igObject = labelConfig.random.legend.color, bgcHigth = 0;
     for (var key in igObject) {
       bgcHigth = bgcHigth + config.genus_legend.space + fontSize
       random_data.push({ name: igObject[key], color: key })
     };
     bgcHigth = bgcHigth + config.genus_legend.padding * 2;
-    var width_bgc = isTow ? 160 : 60;
-    var left = isTow ? 50 : 0;
-    var genus_box = d3.select('#chart_svg').append("g").attr("id", "random-legend").attr("transform", 'translate(' + (leftOffset3 + distance * i - left) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none")
+    var genus_box = d3.select('#chart_svg').append("g").attr("id", "random-legend").attr("transform", 'translate(' + (leftOffset + config.genus_legend.x + (distance + fontSize) * i - 10) + ',' + (config.genus_legend.y + 7) + ')').attr("display", config.genus_legend.show ? "block" : "none")
 
-    genus_box.append("rect").attr("width", width_bgc).attr("height", bgcHigth).attr("fill", "rgba(255,255,255,.9)").attr("style", "stroke:rgba(0,0,0,.4);stroke-width: 0.3;") //背景
+    genus_box.append("rect").attr("width", 60).attr("height", bgcHigth).attr("fill", "rgba(255,255,255,.9)").attr("style", "stroke:rgba(0,0,0,.4);stroke-width: 0.3;") //背景
 
     var genus_legend = genus_box.selectAll(".random-item").data(random_data).enter().append("g").attr("class", "random-item")
       .attr("transform", function (item, i) {
@@ -676,32 +539,9 @@ function init_tree(tree_data, isUpdate) {
   DivMove("#random-legend", "#random-legend-button");
   //去除空格
   function trim(testStr) {
-
-//     var regex = /\[(.+?)\]/g; // [] 中括号
-//     var strArr = testStr.match(regex);
-//     console.log(strArr);
-//     strArr.forEach(function (str) {
-//       // console.log(str);
-//       var selectStr = testStr.slice(0, testStr.indexOf(str));
-//       var jqStr = selectStr.slice(selectStr.lastIndexOf(':'), selectStr.length);
- 
-//       var startStr = testStr.slice(0, testStr.indexOf(jqStr));
-//       var endStr = testStr.slice(testStr.indexOf(jqStr) + (jqStr + str).length, testStr.length);
-//       // console.log(startStr);
-//       // console.log(endStr);
-// // console.log(str.slice(1, str.length - 1));
-//       var boot = str.slice(1, str.length - 1)
-//       testStr = startStr + boot + jqStr + endStr;
-//       console.log(startStr);
-//       console.log(boot);
-//       console.log(jqStr);
-//       console.log(endStr);
-//       // debugger
-//     })
-
     testStr = testStr.replace(/\ +/g, ""); //去掉空格
-    // testStr = testStr.replace(/\[/g, ""); //去掉空格
-    // testStr = testStr.replace(/\]/g, ""); //去掉空格
+    testStr = testStr.replace(/\[/g, ""); //去掉空格
+    testStr = testStr.replace(/\]/g, ""); //去掉空格
     testStr = testStr.replace(/[ ]/g, "");    //去掉空格
     testStr = testStr.replace(/[\r\n]/g, ""); //去掉回车换
     // var result = str.replace(/\[[^]*\]/, "");

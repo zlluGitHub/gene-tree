@@ -697,7 +697,7 @@ const parseString = require('xml2js').parseString;
             if (d === 0) {
               return "";
             };
-            return (scaleTickFormatter(d) * 1).toFixed(2);
+            return (scaleTickFormatter(d)*1).toFixed(2);
           });
 
         if (phylotree.radial()) {
@@ -1006,6 +1006,27 @@ const parseString = require('xml2js').parseString;
                 menu_object.style("display", "none");
                 var markEnd = node.name + ":" + node.attribute;
                 var markStart = "", markNode = {};
+
+                // var num = 0;
+                // function nodeItem(nodeObj) {
+                //   if (num < nodeObj.depth) {
+                //     markNode = nodeObj;
+                //     num = nodeObj.depth
+                //   };
+                //   if (nodeObj.children) {
+                //     nodeObj.children.forEach(function (v) {
+                //       nodeItem(v)
+                //     });
+
+
+                //   }
+                // }
+                // nodeItem(node);
+                // console.log(num);
+                // console.log(markNode);
+                // markStart = markNode.name + ":" + markNode.attribute;
+
+
                 function nodeItem(node) {
                   if (node.children) {
                     var nodeChildren = node.children[0];
@@ -1031,17 +1052,60 @@ const parseString = require('xml2js').parseString;
                   before = inData.slice(0, inData.indexOf(markStart) - 1)
                   isBefore = before.slice(before.length - 1, before.length);
 
+                  // if ((isBefore === '(' && isAfter === ',') || (isBefore === ',' && isAfter === ',')) {
+                  //   inData = before + after.slice(1, after.length)
+                  // } else if (isAfter === ',') {
+                  //   inData = before + after.slice(1, after.length)
+                  // } else if (isBefore === ',') {
+                  //   inData = before.slice(0, before.length - 1) + after
+                  // } else if (isBefore === '(' && isAfter === ')') {
+                  //   if (node.children && node.children.length === 1) {
+                  //     inData = before.slice(0, before.length - 2) + after
+                  //   } else {
+                  //     inData = before.slice(0, before.length - 1) + after.slice(1, after.length)
+                  //   }
+                  // } else {
+                  //   alert('可能因数据格式原因，导致进化树渲染失败!')
+                  // }
                 } else {
                   // 删除叶子节点
+                  // console.log(inData.indexOf(markEnd));
+
                   before = inData.slice(0, inData.indexOf(markEnd))
                   isBefore = before.slice(inData.indexOf(markEnd) - 1, inData.indexOf(markEnd));
+                  // if ((isBefore === ',' && isAfter === ')') || (isBefore === ',' && isAfter === ',')) {
+                  //   inData = before.slice(0, before.length - 1) + after
+                  // } else if (isBefore === '(' && isAfter === ',') {
+                  //   inData = before + after.slice(1, after.length)
+                  // } else if (isBefore === '(' && isAfter === ')') {
+                  //   if (node.children && node.children.length === 1) {
+                  //     inData = before.slice(0, before.length - 2) + after
+                  //   } else {
+                  //     inData = before.slice(0, before.length - 1) + after.slice(1, after.length)
+                  //   }
+                  // } else {
+                  //   alert('可能因数据格式原因，导致进化树渲染失败!')
+                  // }
                 };
+
+
+                // console.log(depth);
 
                 if ((isBefore === ',' && isAfter === ')') || (isBefore === ',' && isAfter === ',')) {
                   inData = before.slice(0, before.length - 1) + after
                 } else if (isBefore === '(' && isAfter === ',') {
 
                   inData = before.slice(0, before.length - depth) + after.slice(1, after.length)
+
+                  // if (node.children && node.children.length === 1) {
+                  //   console.log(depth, '(,1');
+
+                  //   inData = before.slice(0, before.length - depth) + after.slice(1, after.length)
+                  // } else {
+                  //   console.log(depth, '(,2');
+
+                  //   inData = before.slice(0, before.length) + after.slice(1, after.length)
+                  // }
 
                 } else if (isBefore === '(' && isAfter === ')') {
 
@@ -2805,7 +2869,7 @@ const parseString = require('xml2js').parseString;
             .attr("text-anchor", "start")
             .attr("transform", function (d) {
               // console.log(d3_phylotree_svg_translate(phylotree.shift_tip(d)));
-
+          
               if (options["layout"] == "right-to-left") {
                 return d3_phylotree_svg_translate([-20, 0]);
               }
@@ -2931,19 +2995,7 @@ const parseString = require('xml2js').parseString;
 
           d3.layout.fontSize = shown_font_size;//暴露出去
 
-          ele.enter().append("text").attr("dx", function (d) {
-            if (d.isBoot) {
-              return options.itemStyle.node.font.x + 10;
-            } else {
-              return options.itemStyle.node.font.x;
-            }
-          }).attr("dy", function (d) {
-            if (d.isBoot) {
-              return options.itemStyle.node.font.y - 2;
-            } else {
-              return options.itemStyle.node.font.y;
-            }
-          }).attr("style", 'font-size: ' + (options.itemStyle.node.font.size ? options.itemStyle.node.font.size : shown_font_size * 0.8) + 'px; font-family:' + options.itemStyle.node.font.family + ';')
+          ele.enter().append("text").attr("dx", options.itemStyle.node.font.x).attr("dy", options.itemStyle.node.font.y).attr("style", 'font-size: ' + (options.itemStyle.node.font.size?options.itemStyle.node.font.size:shown_font_size*0.8) + 'px; font-family:' + options.itemStyle.node.font.family + ';')
             .attr("fill", function (d) {
               if (options.itemStyle.node.font.color) {
                 return options.itemStyle.node.font.color;
@@ -3190,19 +3242,9 @@ const parseString = require('xml2js').parseString;
         this_node["bootstrap_values"] = current_node_name;
       } else {
         this_node["name"] = current_node_name;
-        this_node["attribute"] = current_node_attribute;
-        this_node["annotation"] = current_node_annotation;
-        this_node["isBoot"] = false;
-
-        // 截取[ ]中的内容
-        var str = current_node_attribute + "[";
-        var i = inData.indexOf(str);
-        if (!current_node_name && i > -1) {
-          var endStr = inData.slice(i + str.length, inData.length);
-          this_node["name"] = endStr.slice(0, endStr.indexOf("]"));
-          this_node["isBoot"] = true;
-        }
       }
+      this_node["attribute"] = current_node_attribute;
+      this_node["annotation"] = current_node_annotation;
       current_node_name = "";
       current_node_attribute = "";
       current_node_annotation = "";
@@ -3327,8 +3369,6 @@ const parseString = require('xml2js').parseString;
             break;
           }
           case 4: { // inside a comment / attribute
-
-
             if (current_char == "]") {
               automaton_state = 3;
             } else {
