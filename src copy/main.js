@@ -135,7 +135,7 @@ const parseString = require('xml2js').parseString;
         "label-nodes-with-name": false,
         zoom: false,
         "show-menu": true,
-        language: 'english', //chinese english
+        language: 'en', //ch en
         legend: [],
         itemStyle: {
           node: {
@@ -697,7 +697,7 @@ const parseString = require('xml2js').parseString;
             if (d === 0) {
               return "";
             };
-            return (scaleTickFormatter(d)*1).toFixed(2);
+            return (scaleTickFormatter(d) * 1).toFixed(2);
           });
 
         if (phylotree.radial()) {
@@ -868,7 +868,7 @@ const parseString = require('xml2js').parseString;
     };
 
     phylotree.handle_node_click = function (node) {
-      var optlan = options.language;
+      var optlan = options['language'];
       var menu_object = d3
         .select(self.container)
         .select("#" + d3_layout_phylotree_context_menu_id);
@@ -898,8 +898,8 @@ const parseString = require('xml2js').parseString;
               .attr("tabindex", "-1")
               .text(
                 d3_phylotree_is_node_collapsed(node)
-                  ? optlan == 'chinese' ? "展开子树分支" : "Expand Subtree"
-                  : optlan == 'chinese' ? "折叠子树分支" : "Collapse Subtree"
+                  ? optlan == 'ch' ? "展开子树分支" : "Expand Subtree"
+                  : optlan == 'ch' ? "折叠子树分支" : "Collapse Subtree"
               )
               .on("click", function (d) {
                 menu_object.style("display", "none");
@@ -910,7 +910,7 @@ const parseString = require('xml2js').parseString;
               menu_object
                 .append("li")
                 .attr("class", "dropdown-header")
-                .text(optlan == 'chinese' ? "切换选择" : "Toggle selection");
+                .text(optlan == 'ch' ? "切换选择" : "Mark subtree");
             }
           }
 
@@ -919,7 +919,7 @@ const parseString = require('xml2js').parseString;
               .append("li")
               .append("a")
               .attr("tabindex", "-1")
-              .text(optlan == 'chinese' ? "选择后代树分支" : "All descendant branches")
+              .text(optlan == 'ch' ? "选择后代树分支" : "Mark all leafs")
               .on("click", function (d) {
                 menu_object.style("display", "none");
                 phylotree.modify_selection(
@@ -927,29 +927,29 @@ const parseString = require('xml2js').parseString;
                 );
               });
 
-            menu_object
-              .append("li")
-              .append("a")
-              .attr("tabindex", "-1")
-              .text(optlan == 'chinese' ? "选择树叶端分支" : "All terminal branches")
-              .on("click", function (d) {
-                menu_object.style("display", "none");
-                phylotree.modify_selection(
-                  phylotree.select_all_descendants(node, true, false)
-                );
-              });
+            // menu_object
+            //   .append("li")
+            //   .append("a")
+            //   .attr("tabindex", "-1")
+            //   .text(optlan == 'ch' ? "选择树叶端分支" : "Mark all branches")
+            //   .on("click", function (d) {
+            //     menu_object.style("display", "none");
+            //     phylotree.modify_selection(
+            //       phylotree.select_all_descendants(node, true, false)
+            //     );
+            //   });
 
-            menu_object
-              .append("li")
-              .append("a")
-              .attr("tabindex", "-1")
-              .text(optlan == 'chinese' ? "选择内部树节点分支" : "All internal branches")
-              .on("click", function (d) {
-                menu_object.style("display", "none");
-                phylotree.modify_selection(
-                  phylotree.select_all_descendants(node, false, true)
-                );
-              });
+            // menu_object
+            //   .append("li")
+            //   .append("a")
+            //   .attr("tabindex", "-1")
+            //   .text(optlan == 'ch' ? "选择内部树节点分支" : "Mark all branches")
+            //   .on("click", function (d) {
+            //     menu_object.style("display", "none");
+            //     phylotree.modify_selection(
+            //       phylotree.select_all_descendants(node, false, true)
+            //     );
+            //   });
           }
         }
 
@@ -959,7 +959,7 @@ const parseString = require('xml2js').parseString;
               .append("li")
               .append("a")
               .attr("tabindex", "-1")
-              .text(optlan == 'chinese' ? "当前树节点分支" : "Incident branch")
+              .text(optlan == 'ch' ? "当前树节点分支" : "Mark branch")
               .on("click", function (d) {
                 menu_object.style("display", "none");
                 phylotree.modify_selection([node]);
@@ -969,7 +969,7 @@ const parseString = require('xml2js').parseString;
               .append("li")
               .append("a")
               .attr("tabindex", "-1")
-              .text(optlan == 'chinese' ? "当前树节点到根路径" : "Path to root")
+              .text(optlan == 'ch' ? "当前树节点到根路径" : "Mark root to branch")
               .on("click", function (d) {
                 menu_object.style("display", "none");
                 phylotree.modify_selection(phylotree.path_to_root(node));
@@ -985,7 +985,7 @@ const parseString = require('xml2js').parseString;
               .append("li")
               .append("a")
               .attr("tabindex", "-1")
-              .text(optlan == 'chinese' ? "当前处重生根布局" : "Reroot on this node")
+              .text(optlan == 'ch' ? "当前处重生根布局" : "Root on this node")
               .on("click", function (d) {
                 menu_object.style("display", "none");
                 phylotree.reroot(node).update();
@@ -1001,32 +1001,11 @@ const parseString = require('xml2js').parseString;
               //   "Hide this " +
               //   (d3_phylotree_is_leafnode(node) ? "node" : "subtree")
               // )
-              .text(optlan == 'chinese' ? "删除当前树分支" : "Hide this subtree")
+              .text(optlan == 'ch' ? "删除当前树分支" : "Delete this subtree")
               .on("click", function (d) {
                 menu_object.style("display", "none");
                 var markEnd = node.name + ":" + node.attribute;
                 var markStart = "", markNode = {};
-
-                // var num = 0;
-                // function nodeItem(nodeObj) {
-                //   if (num < nodeObj.depth) {
-                //     markNode = nodeObj;
-                //     num = nodeObj.depth
-                //   };
-                //   if (nodeObj.children) {
-                //     nodeObj.children.forEach(function (v) {
-                //       nodeItem(v)
-                //     });
-
-
-                //   }
-                // }
-                // nodeItem(node);
-                // console.log(num);
-                // console.log(markNode);
-                // markStart = markNode.name + ":" + markNode.attribute;
-
-
                 function nodeItem(node) {
                   if (node.children) {
                     var nodeChildren = node.children[0];
@@ -1051,61 +1030,17 @@ const parseString = require('xml2js').parseString;
                   depth = markNode.depth - node.depth - 1;
                   before = inData.slice(0, inData.indexOf(markStart) - 1)
                   isBefore = before.slice(before.length - 1, before.length);
-
-                  // if ((isBefore === '(' && isAfter === ',') || (isBefore === ',' && isAfter === ',')) {
-                  //   inData = before + after.slice(1, after.length)
-                  // } else if (isAfter === ',') {
-                  //   inData = before + after.slice(1, after.length)
-                  // } else if (isBefore === ',') {
-                  //   inData = before.slice(0, before.length - 1) + after
-                  // } else if (isBefore === '(' && isAfter === ')') {
-                  //   if (node.children && node.children.length === 1) {
-                  //     inData = before.slice(0, before.length - 2) + after
-                  //   } else {
-                  //     inData = before.slice(0, before.length - 1) + after.slice(1, after.length)
-                  //   }
-                  // } else {
-                  //   alert('可能因数据格式原因，导致进化树渲染失败!')
-                  // }
                 } else {
                   // 删除叶子节点
-                  // console.log(inData.indexOf(markEnd));
-
                   before = inData.slice(0, inData.indexOf(markEnd))
                   isBefore = before.slice(inData.indexOf(markEnd) - 1, inData.indexOf(markEnd));
-                  // if ((isBefore === ',' && isAfter === ')') || (isBefore === ',' && isAfter === ',')) {
-                  //   inData = before.slice(0, before.length - 1) + after
-                  // } else if (isBefore === '(' && isAfter === ',') {
-                  //   inData = before + after.slice(1, after.length)
-                  // } else if (isBefore === '(' && isAfter === ')') {
-                  //   if (node.children && node.children.length === 1) {
-                  //     inData = before.slice(0, before.length - 2) + after
-                  //   } else {
-                  //     inData = before.slice(0, before.length - 1) + after.slice(1, after.length)
-                  //   }
-                  // } else {
-                  //   alert('可能因数据格式原因，导致进化树渲染失败!')
-                  // }
                 };
-
-
-                // console.log(depth);
 
                 if ((isBefore === ',' && isAfter === ')') || (isBefore === ',' && isAfter === ',')) {
                   inData = before.slice(0, before.length - 1) + after
                 } else if (isBefore === '(' && isAfter === ',') {
 
                   inData = before.slice(0, before.length - depth) + after.slice(1, after.length)
-
-                  // if (node.children && node.children.length === 1) {
-                  //   console.log(depth, '(,1');
-
-                  //   inData = before.slice(0, before.length - depth) + after.slice(1, after.length)
-                  // } else {
-                  //   console.log(depth, '(,2');
-
-                  //   inData = before.slice(0, before.length) + after.slice(1, after.length)
-                  // }
 
                 } else if (isBefore === '(' && isAfter === ')') {
 
@@ -1132,9 +1067,8 @@ const parseString = require('xml2js').parseString;
 
                   }
 
-                }
-                else {
-                  alert('可能因数据格式原因，导致进化树渲染失败!')
+                } else {
+                  alert(optlan == 'ch' ? '可能因数据格式原因，导致进化树渲染失败!' : "The rendering of evolutionary tree may fail due to data format!")
                 }
 
 
@@ -1163,7 +1097,7 @@ const parseString = require('xml2js').parseString;
               //   "Hide this " +
               //   (d3_phylotree_is_leafnode(node) ? "node" : "subtree")
               // )
-              .text(optlan == 'chinese' ? "当前添加一个新分支" : "Add this subtree")
+              .text(optlan == 'ch' ? "当前添加一个新分支" : "Add subtree")
               .on("click", function (d) {
                 var mark = node.name + ":" + node.attribute;
                 var before = inData.slice(0, inData.indexOf(mark) - 1)
@@ -1178,9 +1112,9 @@ const parseString = require('xml2js').parseString;
                   var inputLength = $(".input-length").val();
                   // console.log(inputName, inputLength);
                   if (!inputName) {
-                    alert('请输入分支名称！')
+                    alert(optlan == 'ch' ? '请输入分支名称！' : 'Please input branch name!')
                   } else if (!inputLength) {
-                    alert('请输入分支属性！')
+                    alert(optlan == 'ch' ? '请输入分支属性！' : 'Please input branch attribute!')
                   } else {
                     inData = before + "," + inputName + ":" + inputLength + after;
                     init_tree(inData);
@@ -1195,37 +1129,37 @@ const parseString = require('xml2js').parseString;
               });
           }
           // 批量添加新分支
-          if (options['edit-all-node']) {
-            menu_object
-              .append("li")
-              .append("a")
-              .attr("tabindex", "-1")
-              .text(optlan == 'chinese' ? "当前批量添加新分支" : "Add batch subtree")
-              .on("click", function (d) {
-                var mark = node.name + ":" + node.attribute;
-                var before = inData.slice(0, inData.indexOf(mark) - 1)
-                var after = inData.slice(inData.indexOf(mark) - 1, inData.length)
-                // 显示输入框
-                $('#modal-textarea-wrap').css({ 'display': 'flex' });
-                $("#nwk_spec").val("")
-                // 确定事件
-                $('.modal-button .ok').on("click", function (e) {
-                  var textareaValue = $("#nwk_spec").val();
-                  if (!textareaValue) {
-                    alert('请输入分支内容！')
-                  } else {
-                    inData = before + "," + textareaValue + after;
-                    init_tree(inData);
-                    $('#modal-textarea-wrap').css({ 'display': 'none' });
-                  }
+          // if (options['edit-all-node']) {
+          //   menu_object
+          //     .append("li")
+          //     .append("a")
+          //     .attr("tabindex", "-1")
+          //     .text(optlan == 'ch' ? "当前批量添加新分支" : "Add batch subtree")
+          //     .on("click", function (d) {
+          //       var mark = node.name + ":" + node.attribute;
+          //       var before = inData.slice(0, inData.indexOf(mark) - 1)
+          //       var after = inData.slice(inData.indexOf(mark) - 1, inData.length)
+          //       // 显示输入框
+          //       $('#modal-textarea-wrap').css({ 'display': 'flex' });
+          //       $("#nwk_spec").val("")
+          //       // 确定事件
+          //       $('.modal-button .ok').on("click", function (e) {
+          //         var textareaValue = $("#nwk_spec").val();
+          //         if (!textareaValue) {
+          //           alert('请输入分支内容！')
+          //         } else {
+          //           inData = before + "," + textareaValue + after;
+          //           init_tree(inData);
+          //           $('#modal-textarea-wrap').css({ 'display': 'none' });
+          //         }
 
-                });
-                // 取消事件
-                $('.modal-button .no').on("click", function (e) {
-                  $('#modal-textarea-wrap').css({ 'display': 'none' });
-                });
-              });
-          }
+          //       });
+          //       // 取消事件
+          //       $('.modal-button .no').on("click", function (e) {
+          //         $('#modal-textarea-wrap').css({ 'display': 'none' });
+          //       });
+          //     });
+          // }
           // 编辑所有分支
           if (options['edit-all-node']) {
             menu_object
@@ -1236,7 +1170,7 @@ const parseString = require('xml2js').parseString;
               //   "Hide this " +
               //   (d3_phylotree_is_leafnode(node) ? "node" : "subtree")
               // )
-              .text(optlan == 'chinese' ? "编辑所有分支" : "Edit all subtree")
+              .text(optlan == 'ch' ? "编辑所有分支" : "Edit this tree")
               .on("click", function (d) {
                 // 显示输入框
                 $('#modal-textarea-wrap').css({ 'display': 'flex' });
@@ -1267,7 +1201,7 @@ const parseString = require('xml2js').parseString;
         //     .append("li")
         //     .append("a")
         //     .attr("tabindex", "-1")
-        //     .text(optlan == 'chinese' ? "显示所有子代树分支" : "Show all descendant nodes")
+        //     .text(optlan == 'ch' ? "显示所有子代树分支" : "Show all descendant nodes")
         //     .on("click", function (d) {
         //       menu_object.style("display", "none");
         //       phylotree
@@ -2869,7 +2803,7 @@ const parseString = require('xml2js').parseString;
             .attr("text-anchor", "start")
             .attr("transform", function (d) {
               // console.log(d3_phylotree_svg_translate(phylotree.shift_tip(d)));
-          
+
               if (options["layout"] == "right-to-left") {
                 return d3_phylotree_svg_translate([-20, 0]);
               }
@@ -2995,7 +2929,19 @@ const parseString = require('xml2js').parseString;
 
           d3.layout.fontSize = shown_font_size;//暴露出去
 
-          ele.enter().append("text").attr("dx", options.itemStyle.node.font.x).attr("dy", options.itemStyle.node.font.y).attr("style", 'font-size: ' + (options.itemStyle.node.font.size?options.itemStyle.node.font.size:shown_font_size*0.8) + 'px; font-family:' + options.itemStyle.node.font.family + ';')
+          ele.enter().append("text").attr("dx", function (d) {
+            if (d.isBoot) {
+              return options.itemStyle.node.font.x + 10;
+            } else {
+              return options.itemStyle.node.font.x;
+            }
+          }).attr("dy", function (d) {
+            if (d.isBoot) {
+              return options.itemStyle.node.font.y - 2;
+            } else {
+              return options.itemStyle.node.font.y;
+            }
+          }).attr("style", 'font-size: ' + (options.itemStyle.node.font.size ? options.itemStyle.node.font.size : shown_font_size * 0.8) + 'px; font-family:' + options.itemStyle.node.font.family + ';')
             .attr("fill", function (d) {
               if (options.itemStyle.node.font.color) {
                 return options.itemStyle.node.font.color;
@@ -3242,9 +3188,19 @@ const parseString = require('xml2js').parseString;
         this_node["bootstrap_values"] = current_node_name;
       } else {
         this_node["name"] = current_node_name;
+        this_node["attribute"] = current_node_attribute;
+        this_node["annotation"] = current_node_annotation;
+        this_node["isBoot"] = false;
+
+        // 截取[ ]中的内容
+        var str = current_node_attribute + "[";
+        var i = inData.indexOf(str);
+        if (!current_node_name && i > -1) {
+          var endStr = inData.slice(i + str.length, inData.length);
+          this_node["name"] = endStr.slice(0, endStr.indexOf("]"));
+          this_node["isBoot"] = true;
+        }
       }
-      this_node["attribute"] = current_node_attribute;
-      this_node["annotation"] = current_node_annotation;
       current_node_name = "";
       current_node_attribute = "";
       current_node_annotation = "";
@@ -3369,6 +3325,8 @@ const parseString = require('xml2js').parseString;
             break;
           }
           case 4: { // inside a comment / attribute
+
+
             if (current_char == "]") {
               automaton_state = 3;
             } else {

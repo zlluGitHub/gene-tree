@@ -12,7 +12,7 @@ module.exports = {
 },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: './js/[name].min.js',
+    filename: './[name].min.js',
     // filename: './js/phylotree.min.js'
   },
   externals: [
