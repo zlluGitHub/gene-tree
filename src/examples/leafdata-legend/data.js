@@ -587,12 +587,34 @@ var configData = {
 }
 
 let labelConfig = {
-	position:"right",
-	nodeLength: [0, 100],
-	nodeColor:["#000","#333","#666","#999","#ccc"],
-	"country": {
-		"position": 1,
+	// position:"right",
+	// nodeLength: [0, 100],
+	// nodeColor:["#000","#333","#666","#999","#ccc"],
+	"identity": {
 		"legend": {
+			"name": "iden...",
+			"color": {
+				"#aaa": "Homo sapiens",
+				"#9EFF00FF": "Rhinolophus affinis",
+				"#00FF94FF": "Rhinolophus monoceros",
+				"#FA00FFFF": "Rhinolophus sinicus"
+			}
+		}
+	}, 
+	"host": {
+		"legend": {
+			"name": "host...",
+			"color": {
+				"#FF2E00FF": "Homo sapiens",
+				"#9EFF00FF": "Rhinolophus affinis",
+				"#00FF94FF": "Rhinolophus monoceros",
+				"#FA00FFFF": "Rhinolophus sinicus"
+			}
+		}
+	},
+	"country": {
+		"legend": {
+			"name": "coun...",
 			"shape": {
 				"star": "China",
 				"circle": "Japan",
@@ -600,9 +622,11 @@ let labelConfig = {
 			}
 		}
 	},
+
+
 	"collectionDate": {
-		"position": 2,
 		"legend": {
+			"name": "coll...",
 			"color": {
 				"#D7D7D7": "2008/3/28",
 				"#D1D1D1": "2008/8/6",
@@ -628,20 +652,6 @@ let labelConfig = {
 				"#6B6B6B": "2020/1/2"
 			}
 		}
-	},
-	"host": {
-		"position": 3,
-		"legend": {
-			"color": {
-				"#FF2E00FF": "Homo sapiens",
-				"#9EFF00FF": "Rhinolophus affinis",
-				"#00FF94FF": "Rhinolophus monoceros",
-				"#FA00FFFF": "Rhinolophus sinicus"
-			}
-		}
-	},
-	"identity": {
-		"position": 4
-	},
+	}
 }
 

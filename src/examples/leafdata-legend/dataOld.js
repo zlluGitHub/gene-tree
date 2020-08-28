@@ -741,6 +741,7 @@ var configData = {
         },
         "flag": {
             "shape": "rhombus",
+            "color": "red",
             "label": "0"
         },
         "random": {
@@ -768,11 +769,10 @@ var configData = {
 
 
 let labelConfig = {
-    nodeLength: [0, 1],
     "identity_genus": {
-        "position": 1,
         "length": [0.9, 0.95],
         "legend": {
+            "name":"genus",
             "color": {
                 "#66FF00FF": "Halalkalicoccus",
                 "#FF9900FF": "Halanaeroarchaeum",
@@ -804,8 +804,8 @@ let labelConfig = {
         }
     },
     "flag": {
-        "position": 2,
         "legend": {
+            "name":"flag...",
             "shape": {
                 "circle": "-1",
                 "rhombus": "0",
@@ -815,8 +815,8 @@ let labelConfig = {
         }
     },
     "random": {
-        "position": 3,
         "legend": {
+            "name":"rand...",
             "color": {
                 "#D9D9D9": "0",
                 "#BBBBBB": "1",

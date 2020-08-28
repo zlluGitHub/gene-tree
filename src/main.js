@@ -129,12 +129,14 @@ const parseString = require('xml2js').parseString;
         brush: true,
         reroot: true,
         hide: true,
-        add: true,
-        'edit-node': true,
-        'edit-all-node': true,
         "label-nodes-with-name": false,
         zoom: false,
         "show-menu": true,
+        // 新增功能
+        delete: true,
+        add: true,
+        'edit-node': true,
+        'edit-all-node': true,
         language: 'en', //ch en
         legend: [],
         itemStyle: {
@@ -148,7 +150,10 @@ const parseString = require('xml2js').parseString;
               y: -8
             }
           }
-        }
+        },
+        "scaleBar-position": 'top',//比例尺 位置 top bottom
+        "scaleBar-toFixed": 2,//比例尺 小数点保留位数
+        "bar-ispot": true
       },
       css_classes = {
         "tree-container": "phylotree-container",
@@ -631,6 +636,7 @@ const parseString = require('xml2js').parseString;
         nodes.forEach(function (d) {
           d.x *= scales[0];
           d.y *= scales[1];
+
           if (options["layout"] == "right-to-left") {
             d.y = _extents[1][1] * scales[1] - d.y;
           }
@@ -640,6 +646,9 @@ const parseString = require('xml2js').parseString;
             if (parseInt(bubble_size) < 1900) {
               right_most_leaf = Math.max(right_most_leaf, bubble_size);
             }
+            // right_most_leaf = Math.max(right_most_leaf,
+            //   d.y + phylotree.node_bubble_size(d)
+            // );
           }
 
           if (d.collapsed) {
@@ -691,12 +700,13 @@ const parseString = require('xml2js').parseString;
         draw_scale_bar = d3.svg
           .axis()
           .scale(scale)
-          .orient("bottom")
+          .orient(options["scaleBar-position"])
           .tickFormat(function (d) {
             if (d === 0) {
               return "";
-            };
-            return (scaleTickFormatter(d) * 1).toFixed(2);
+            }
+            return (scaleTickFormatter(d) * 1).toFixed(options["scaleBar-toFixed"] * 1);
+            // return scaleTickFormatter(d);
           });
 
         if (phylotree.radial()) {
@@ -926,29 +936,29 @@ const parseString = require('xml2js').parseString;
                 );
               });
 
-            // menu_object
-            //   .append("li")
-            //   .append("a")
-            //   .attr("tabindex", "-1")
-            //   .text(optlan == 'ch' ? "选择树叶端分支" : "Mark all branches")
-            //   .on("click", function (d) {
-            //     menu_object.style("display", "none");
-            //     phylotree.modify_selection(
-            //       phylotree.select_all_descendants(node, true, false)
-            //     );
-            //   });
+            menu_object
+              .append("li")
+              .append("a")
+              .attr("tabindex", "-1")
+              .text(optlan == 'ch' ? "所有终端分支" : "Mark all terminal branches")
+              .on("click", function (d) {
+                menu_object.style("display", "none");
+                phylotree.modify_selection(
+                  phylotree.select_all_descendants(node, true, false)
+                );
+              });
 
-            // menu_object
-            //   .append("li")
-            //   .append("a")
-            //   .attr("tabindex", "-1")
-            //   .text(optlan == 'ch' ? "选择内部树节点分支" : "Mark all branches")
-            //   .on("click", function (d) {
-            //     menu_object.style("display", "none");
-            //     phylotree.modify_selection(
-            //       phylotree.select_all_descendants(node, false, true)
-            //     );
-            //   });
+            menu_object
+              .append("li")
+              .append("a")
+              .attr("tabindex", "-1")
+              .text(optlan == 'ch' ? "所有内部分支" : "Mark all internal branches")
+              .on("click", function (d) {
+                menu_object.style("display", "none");
+                phylotree.modify_selection(
+                  phylotree.select_all_descendants(node, false, true)
+                );
+              });
           }
         }
 
@@ -990,8 +1000,28 @@ const parseString = require('xml2js').parseString;
                 phylotree.reroot(node).update();
               });
           }
-
+          // 隐藏
           if (options['hide']) {
+            menu_object
+              .append("li")
+              .append("a")
+              .attr("tabindex", "-1")
+              .text(optlan == 'ch' ? "隐藏当前" +
+                (d3_phylotree_is_leafnode(node) ? "节点" : "分支") :
+                "Hide this " +
+                (d3_phylotree_is_leafnode(node) ? "node" : "subtree")
+              )
+              .on("click", function (d) {
+                menu_object.style("display", "none");
+                phylotree
+                  .modify_selection([node], "notshown", true, true)
+                  .update_has_hidden_nodes()
+                  .update();
+              });
+          };
+
+          //删除
+          if (options['delete'] && inData.indexOf("(") > -1 && inData.indexOf(")") > -1) {
             menu_object
               .append("li")
               .append("a")
@@ -1087,7 +1117,7 @@ const parseString = require('xml2js').parseString;
               });
           }
           // 添加新分支
-          if (options['add']) {
+          if (options['add']&& inData.indexOf("(") > -1 && inData.indexOf(")") > -1) {
             menu_object
               .append("li")
               .append("a")
@@ -1159,8 +1189,9 @@ const parseString = require('xml2js').parseString;
           //       });
           //     });
           // }
+
           // 编辑所有分支
-          if (options['edit-all-node']) {
+          if (options['edit-all-node']&& inData.indexOf("(") > -1 && inData.indexOf(")") > -1) {
             menu_object
               .append("li")
               .append("a")
@@ -1194,27 +1225,26 @@ const parseString = require('xml2js').parseString;
           }
         }
 
-
-        // if (d3_phylotree_has_hidden_nodes(node)) {
-        //   menu_object
-        //     .append("li")
-        //     .append("a")
-        //     .attr("tabindex", "-1")
-        //     .text(optlan == 'ch' ? "显示所有子代树分支" : "Show all descendant nodes")
-        //     .on("click", function (d) {
-        //       menu_object.style("display", "none");
-        //       phylotree
-        //         .modify_selection(
-        //           phylotree.select_all_descendants(node, true, true),
-        //           "notshown",
-        //           true,
-        //           true,
-        //           "false"
-        //         )
-        //         .update_has_hidden_nodes()
-        //         .update();
-        //     });
-        // }
+        if (d3_phylotree_has_hidden_nodes(node)) {
+          menu_object
+            .append("li")
+            .append("a")
+            .attr("tabindex", "-1")
+            .text(optlan == 'ch' ? "显示所有子节点" : "Show all descendant nodes")
+            .on("click", function (d) {
+              menu_object.style("display", "none");
+              phylotree
+                .modify_selection(
+                  phylotree.select_all_descendants(node, true, true),
+                  "notshown",
+                  true,
+                  true,
+                  "false"
+                )
+                .update_has_hidden_nodes()
+                .update();
+            });
+        }
 
         // now see if we need to add user defined menus
 
@@ -1596,8 +1626,6 @@ const parseString = require('xml2js').parseString;
     };
 
     phylotree.shift_tip = function (d) {
-      // console.log([right_most_leaf - d.screen_x, 0]);
-
       if (options["is-radial"]) {
         return [
           (d.text_align == "end" ? -1 : 1) *
@@ -2068,8 +2096,6 @@ const parseString = require('xml2js').parseString;
     phylotree.update_has_hidden_nodes = function () {
       for (k = nodes.length - 1; k >= 0; k -= 1) {
         if (d3_phylotree_is_leafnode(nodes[k])) {
-
-
           nodes[k].has_hidden_nodes = nodes[k].notshown;
         } else {
           nodes[k].has_hidden_nodes = nodes[k].children.reduce(function (p, c) {
@@ -2280,12 +2306,12 @@ const parseString = require('xml2js').parseString;
         .append("g")
         .attr("class", css_classes["tree-container"]);
 
-      // enclosure.attr("transform", function (d) {
-      //   return d3_phylotree_svg_translate([
-      //     offsets[1] + options["left-offset"],
-      //     phylotree.pad_height()
-      //   ]);
-      // });
+      enclosure.attr("transform", function (d) {
+        return d3_phylotree_svg_translate([
+          offsets[1] + options["left-offset"],
+          phylotree.pad_height()
+        ]);
+      });
 
       if (draw_scale_bar) {
         var scale_bar = svg
@@ -2295,13 +2321,17 @@ const parseString = require('xml2js').parseString;
         scale_bar
           .attr("class", css_classes["tree-scale-bar"])
           .style("font-size", ensure_size_is_in_px(scale_bar_font_size))
-          // .attr("transform", function (d) {
-          //   return d3_phylotree_svg_translate([
-          //     offsets[1] + options["left-offset"],
-          //     phylotree.pad_height() - 10
-          //   ]);
-          // })
           .call(draw_scale_bar);
+
+        if (options["bar-ispot"]) { //leafdata-legend
+          scale_bar.attr("transform", function (d) {
+            return d3_phylotree_svg_translate([
+              offsets[1] + options["left-offset"],
+              phylotree.pad_height() - 10
+            ]);
+          })
+        }
+
         scale_bar.selectAll("text").style("text-anchor", "end");
       } else {
         svg.selectAll("." + css_classes["tree-scale-bar"]).remove();
@@ -2732,7 +2762,7 @@ const parseString = require('xml2js').parseString;
         if (haz_title.empty()) {
           haz_title = container.append("title");
         }
-        haz_title.text("Length : " + bl);
+        haz_title.text("Length = " + bl);
       } else {
         container.selectAll("title").remove();
       }
@@ -2801,8 +2831,6 @@ const parseString = require('xml2js').parseString;
           (transitions ? labels.transition() : labels)
             .attr("text-anchor", "start")
             .attr("transform", function (d) {
-              // console.log(d3_phylotree_svg_translate(phylotree.shift_tip(d)));
-
               if (options["layout"] == "right-to-left") {
                 return d3_phylotree_svg_translate([-20, 0]);
               }
@@ -2893,6 +2921,21 @@ const parseString = require('xml2js').parseString;
           }
         }
       } else {
+        // var circles = container.selectAll("circle").data([node]),
+        //   radius = phylotree.node_circle_size()(node);
+
+        // if (radius > 0) {
+        //   circles.enter().append("circle");
+        //   circles
+        //     .attr("r", function (d) {
+        //       return Math.min(shown_font_size * 0.75, radius);
+        //     })
+        //     .on("click", function (d) {
+        //       phylotree.handle_node_click(d);
+        //     });
+        // } else {
+        //   circles.remove();
+        // }
         var ele = container.selectAll("circle").data([node]),
           radius = phylotree.node_circle_size()(node);
         if (radius > 0) {
@@ -3042,7 +3085,7 @@ const parseString = require('xml2js').parseString;
     // Add an alias for nodes and links, for convenience.
     phylotree.nodes = phylotree;
     phylotree.links = d3.layout.cluster().links;
-    // right_most_leaf = 0
+
     return phylotree;
   };
 
@@ -3187,6 +3230,7 @@ const parseString = require('xml2js').parseString;
         this_node["bootstrap_values"] = current_node_name;
       } else {
         this_node["name"] = current_node_name;
+
         this_node["attribute"] = current_node_attribute;
         this_node["annotation"] = current_node_annotation;
         this_node["isBoot"] = false;
@@ -3200,6 +3244,8 @@ const parseString = require('xml2js').parseString;
           this_node["isBoot"] = true;
         }
       }
+      this_node["attribute"] = current_node_attribute;
+      this_node["annotation"] = current_node_annotation;
       current_node_name = "";
       current_node_attribute = "";
       current_node_annotation = "";
@@ -3545,4 +3591,3 @@ const parseString = require('xml2js').parseString;
   }
 
 }.call(this));
-// require('./js/own.js');

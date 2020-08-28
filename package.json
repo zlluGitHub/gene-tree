@@ -30,8 +30,6 @@
     "webpack-cli": "^3.1.2"
   },
   "scripts": {
-    "docs": "sphinx-build -b html docs documentation",
-    "develop": "concurrently \"webpack --watch --mode=development\" \"http-server\"",
     "build": "webpack",
     "dev": "webpack-dev-server --open --port 3000 --contentBase src --hot"
   }
