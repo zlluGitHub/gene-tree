@@ -31,19 +31,19 @@ npm run build
 ## 部分案例
 - **案例1：** 本案例位于 [leafdata](http://localhost:3000/examples/leafdata/) 文件夹下，截图如下：
 
-    ![Alt Text](/images/leafdata.png)
+    ![Alt Text](https://gitee.com/zlluGitHub/gene-tree/raw/master/images/leafdata.png)
 
 - **案例2：** 本案例位于 [leafdata-legend](http://localhost:3000/examples/leafdata-legend/) 文件夹下，截图如下：
 
-    ![Alt Text](/images/leafdata-legend.jpg)
+    ![Alt Text](https://gitee.com/zlluGitHub/gene-tree/raw/master/images/leafdata-legend.jpg)
 
 - **案例3：** 本案例位于 [large-ancestral-structural-viewer](http://localhost:3000/examples/large-ancestral-structural-viewer/) 文件夹下，截图如下：
 
-    ![Alt Text](/images/structure.gif)
+    ![Alt Text](https://gitee.com/zlluGitHub/gene-tree/raw/master/images/structure.gif)
 
 - **案例4：** 本案例位于 [phylo-bar](http://localhost:3000/examples/phylo-bar/) 文件夹下，截图如下：
 
-    ![Alt Text](/images/bar.gif)
+    ![Alt Text](https://gitee.com/zlluGitHub/gene-tree/raw/master/images/bar.gif)
 
 ## 参考资料
 Phylotree.js官方文档：[http://phylotree.hyphy.org/documentation](http://phylotree.hyphy.org/documentation/)
