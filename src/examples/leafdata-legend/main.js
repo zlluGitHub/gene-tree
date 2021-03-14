@@ -407,22 +407,6 @@ function init_tree(tree_data, isUpdate) {
       }
     }
   }
-  // d3.select('#chart_svg').on("click", function () {
-
-  //   let isBlock = false
-  //   d3.selectAll('.legend-box').each(function () {
-  //     console.log(d3.select(this).attr("display"));
-  //     if (d3.select(this).attr("display") === 'block') {
-  //       isBlock = true
-  //     }
-  //   });
-  //   if (isBlock) {
-  //     d3.selectAll('.legend-box').attr("display", "none");
-  //     d3.selectAll('.arrow').attr("style", 'transform: rotate(-180deg); transform-origin: 50% 50% 0px; transition: all 350ms ease-in-out 0s;');
-  //   }
-
-
-  // });
 
 
   //去除空格
@@ -438,30 +422,8 @@ function init_tree(tree_data, isUpdate) {
   $(".loading-box").attr("style", "display:none");
 }
 
-// 数据部分
-// tree_data = "(((Duganella#zoogloeoides#<AB681807.1>:0.01508,(Rugamonas#rubra#<GCA_900114705.1>:0.00305,((Aquaspirillum#arcticum#<AB074523.1>:0.00878,((Undibacterium#pigrum#<GCA_003201815.1>:0.02051,Undibacterium#terreum#<GCM10011396>:0.02263)0.980:0.01177,(Herminiimonas#fonticola#<GCA_004361795.1>:0.00727,(((Herminiimonas#saxobsidens#<GCM10007237>:0.00016,Herminiimonas#contaminans#<GCM10007319>:0.00142)0.940:0.00338,(((Herbaspirillum#autotrophicum#<GCA_001189915.1>:0.00499,(Herbaspirillum#rhizosphaerae#<GCA_001189965.1>:0.01104,(Herbaspirillum#hiltneri#<GCA_001267925.1>:0.00070,Herbaspirillum#lusitanum#<GCA_000256565.1>:0.00072)1.000:0.01021)0.360:0.00444)1.000:0.00814,(Oxalicibacterium#solurbis#<GCM10011430>:0.01237,((Noviherbaspirillum#aurantiacum#<HQ830497.1>:0.00188,(Herbaspirillum#canariense#<HQ830496.1>:0.00756,Noviherbaspirillum#soli#<HQ830498.1>:0.00149)0.540:0.00406)0.990:0.01371,(Herbaspirillum#seropedicae#<GCA_001040945.1>:0.00015,(((Herbaspirillum#aquaticum#<GCA_002213425.1>:0.00071,Herbaspirillum#huttiense#subsp.#putei#<GCA_000478365.1>:0.00214)0.740:0.00057,(Herbaspirillum#frisingense#<GCA_000300975.2>:0.00612,Herbaspirillum#chlorophenolicum#<GCA_001189955.1>:0.00429)0.840:0.00287)0.950:0.00434,Herbaspirillum#rubrisubalbicans#<GCA_003719195.1>:0.00293)0.970:0.00598)0.970:0.01105)1.000:0.01247)0.210:0.00657)0.610:0.00168,(Glaciimonas#singularis#<JX218021.1>:0.01650,Collimonas#arenae#<GCA_001584165.1>:0.02038)0.910:0.00697)1.000:0.01360)0.890:0.00555,Herminiimonas#arsenicoxydans#<GCA_000026125.1>:0.00322)0.960:0.00556)1.000:0.01542)0.960:0.00841)0.930:0.00844,(((Janthinobacterium#aquaticum#<MN548378.1>:0.00014,(Janthinobacterium#violaceinigrum#<MK968136.1>:0.00143,Janthinobacterium#agaricidamnosum#<GCA_000723165.1>:0.00657)0.580:0.00142)1.000:0.00434,Janthinobacterium#rivuli#<MN548379.1>:0.00289)0.880:0.00140,Janthinobacterium#lividum#<GCA_900451145.1>:0.00016)0.950:0.00826)0.980:0.01124)0.590:0.00631)0.970:0.00996,(((Massilia#eurypsychrophila#<GCM10011259>:0.00063,Massilia#psychrophila#<GCA_002760665.1>:0.01950)1.000:0.00891,((query1_b:0.0,query1_c:0.0,query1_d:0.0,query1_e:0.0,query1_f:0.0):0.00015,(query1_a:0.00142,(query1_g:0.00014,Massilia#violaceinigra#<KF267246.2>:0.00073)0.810:0.00071)0.770:0.00071)0.950:0.00014)0.480:0.00338,Massilia#atriviolacea#<GCA_003953935.1>:0.00267)0.950:0.00729)1.000:0.01178,(Massilia#consociata#<GCM10011257>:0.01638,(Massilia#neuiana#<KX066866.1>:0.00014,GCMA0001118:0.82423)0.140:0.00455)0.990:0.00995,(((Massilia#albidiflava#<GCM10007387>:0.01817,Massilia#putida#<GCA_001941825.1>:0.01871)0.760:0.00556,(Massilia#armeniaca#<GCA_003028855.1>:0.01050,(Massilia#timonae#<GCA_000315425.1>:0.00490,(Massilia#oculi#<GCA_003143515.1>:0.01656,Massilia#arenae#<KT369857.3>:0.00895)0.610:0.00868)0.930:0.01000)0.990:0.01061)0.830:0.00665,Massilia#namucuonensis#<JF799985.1>:0.00871)0.990:0.00919);"
-
-// tree_data = "(((Natronorubrum_tibetense_91.284%:0.021736330,0.980:0.012378428)0.996:0.016690731)0.474:0.006371801,Haloterrigena_turkmenica_90.934%:0.017875381,(((((Natronococcus_occultus_90.903%:0.024715036,Natronococcus_amylolyticus_90.669%:0.017448501)0.988:0.015135714)0.642:0.010963602)0.989:0.01333134)0.969:0.011975021,(0.345:0.004923783)0.950:0.009983374)0.582:0.004262338)"
-
-// tree_data = "(Haloterrigena_turkmenica_90.934%:0.017875381,((Hahghtthrt:0.017875381,((zlllawdqwij-asdaw:0.015135714)0.642:0.010963602)0.989:0.01333134)0.969:0.011975021)0.582:0.004262338)"
-
-
-// tree_data = "(((((((((((((((Agrobacterium#arsenijevicii#<GCA_000949895.1>:0.075393627,(Pseudorhizobium#pelagicum#<GCA_000722615.1>:0.059486974,(Neorhizobium#galegae#<GCA_000731315.1>:0.032288173,(Neorhizobium#alkalisoli#<GCA_002968635.1>:0.010648845,Neorhizobium#huautlense#<GCA_002968575.1>:0.013331359)1.000:0.021865689)1.000:0.021392216)1.000:0.023568006):0.015834089,Ciceribacter#lividus#<GCA_003337715.1>:0.06675637)0.980:0.01466691,(Rhizobium#rhizogenes#<GCA_000696095.1>:0.046008829,((query1:0.001839046,query3:0.00202898)0.964:0.000941638,(Rhizobium#laguerreae#<GCA_002008165.1>:0.005321714,(query4:0.001483495,query2:0.016603086:0.000804004)1.000:0.002885845)0.978:0.002546043)1.000:0.047629228)1.000:0.030012099)1.000:0.016426666,((Mycoplana#dimorpha#<GCA_003046475.1>:0.050327096,(Shinella#granuli#<GCA_004341885.1>:0.016845439,(Shinella#curvata#<GCA_010994455.1>:0.026548599,Shinella#kummerowiae#<GCA_009827055.1>:0.02028956)1.000:0.010269245)1.000:0.03347571)1.000:0.024137164,((Pararhizobium#polonicum#<GCA_001687365.1>:0.032885317,Pararhizobium#antarcticum#<GCA_001885585.1>:0.065498976)1.000:0.037382387,(Ensifer#adhaerens#<GCA_013283195.1>:0.032886537,((Ensifer#medicae#<GCA_007827695.1>:0.016362939,(Sinorhizobium#meliloti#<GCA_006539625.1>:0.00792573,Ensifer#arboris#<GCA_000427465.1>:0.011922315)1.000:0.00439496)1.000:0.015281581,(Ensifer#terangae#<GCM10007433>:0.020830405,(Ensifer#saheli#<GCA_001651875.1>:0.020816432,Ensifer#glycinis#<GCA_001651865.1>:0.020144325)1.000:0.00600123)0.488:0.007251557)1.000:0.020200922)1.000:0.021424929)1.000:0.016272074)1.000:0.015580312)1.000:0.030802107,(Martelella#limonii#<GCA_013344475.1>:0.040346405,Martelella#endophytica#<GCA_000960975.1>:0.04248996)1.000:0.10418917)1.000:0.034096636,Georhizobium#profundi#<GCA_003952725.1>:0.119550552)1.000:0.014773863,(Hoeflea#suaedae#<GCA_004354915.1>:0.114292277,Hoeflea#olei#<GCA_001703635.1>:0.101465749)1.000:0.043188819)0.610:0.045146914,(((Mesorhizobium#soli#<GCA_003012705.1>:0.026642285,Pseudaminobacter#salicylatoxidans#<GCA_003148475.1>:0.028768606)1.000:0.04063043,(Aminobacter#aminovorans#<GCA_900445235.1>:0.056249222,(Pseudaminobacter#manganicus#<GCA_002075885.1>:0.078749799,(Mesorhizobium#hawassense#<GCA_003289945.1>:0.032017047,(Mesorhizobium#opportunistum#<GCA_000176035.2>:0.010519202,(Mesorhizobium#erdmanii#<GCA_000472705.1>:0.013562725,Mesorhizobium#australicum#<GCA_000230995.3>:0.015424138)0.994:0.005283253)1.000:0.018892408)1.000:0.032833966)1.000:0.018508462)1.000:0.017001078)1.000:0.063172486,(Phyllobacterium#salinisoli#<GCA_003335045.1>:0.072336759,Phyllobacterium#myrsinacearum#<GCA_004217385.1>:0.079842734)1.000:0.044195899)1.000:0.032752382)1.000:0.037736823,Aurantimonas#coralicida#<GCA_000421645.1>:0.190778123)1.000:0.075489313,((Phreatobacter#oligotrophus#<GCA_003046185.1>:0.20266938,(Bradyrhizobium#symbiodeficiens#<GCA_002266465.2>:0.026468454,Bradyrhizobium#neotropicale#<GCA_001641695.1>:0.023412727)1.000:0.190458222)1.000:0.078548353,((Prosthecomicrobium#hirschii#<GCA_001305515.1>:0.189991612,Rhodobium#orientis#<GCA_003258835.1>:0.180244792)1.000:0.028127582,(Bauldia#litoralis#<GCA_900104485.1>:0.275824185,(Pleomorphomonas#diazotrophica#<GCA_002844595.1>:0.146585667,Methylobrevis#pamukkalensis#<GCA_001720135.1>:0.152992742)1.000:0.065155477)1.000:0.03243195)0.956:0.01889549)0.908:0.030747005)1.000:0.105504999,Paracoccus#tibetensis#<GCA_900102505.1>:0.363443724)1.000:0.046838963,CECT_8513.contigs:0.344775459)0.998:0.046604546,(CECT_8531.contigs:0.163481036,CECT_8016.contigs:0.163103869)1.000:0.224677058)0.998:0.276778528,(Pseudoxanthomonas#dokdonensis#<GCA_001431405.1>:0.35078195,(CCM_8639.contigs:0.354853218,Haemophilus#massiliensis#<Haemophilus_massiliensis>:0.337863548)1.000:0.094175187)1.000:0.213685873)1.000:0,Bacillus#saganii#<Bacillus_saganii>:0.68349402)Root;"
-
-
-
-
-
-
-
-
-// 初始化
-// init_tree(example_tree);
-// init_tree(example_tree_text);
+// 初始化 数据部分
 init_tree(tree_data);
-// init_tree(example_tree2);
-// init_tree(iTOL_salmonella_new);
-// init_tree(fasttree);
 
 
 /************************* 交互部分 *****************************/
@@ -611,28 +573,6 @@ $("#save-img-pdf").on("click", function (e) {
 })
 
 
-// // 鼠标拖动事件
-// function DivMove(obj, ele) {
-
-//   $(obj).mousedown(function (e) {
-//     $(obj).css("cursor", "move");//改变鼠标指针样式
-//     var x = e.offsetX; //获取div的当前X坐标
-//     var y = e.offsetY;  //获取div的当前X坐标
-//     var str = $(obj).attr("transform");
-//     var arr = str.slice(str.indexOf("(") + 1, str.indexOf(")")).split(',');
-//     $(document).bind("mousemove", function (ev) {//鼠标移动事件
-//       var ox = ev.offsetX - x;
-//       var oy = ev.offsetY - y;
-//       $(obj).attr("transform", "translate(" + (arr[0] * 1 + ox - 10) + "," + (oy + arr[1] * 1 + 7) + ")")
-//     });
-//   })
-//   $(document).mouseup(function () {
-//     $(obj).css("cursor", "default");//还原鼠标指针样式
-//     $(this).unbind("mousemove");
-//   });
-// }
-
-
 // 菜单项
 var menu = $("#right_click_menu");
 document.querySelector("#chart_svg").oncontextmenu = function (ev) {
@@ -647,14 +587,3 @@ var app = document.querySelector('body');
 app.onclick = function () {
   menu.attr("style", "display:none;");
 };
-
-
-
-// $("body").on("click", function (e) {
-//   d3.select('#flag-legend').attr("display", "none");
-//   d3.select('#random-legend').attr("display", "none");
-//   d3.select('#genus-legend').attr("display", "none");
-//   d3.select('#genus_path').attr("class", "");
-//   d3.select('#flag_path').attr("class", "");
-//   d3.select('#random_path').attr("class", "");
-// })
