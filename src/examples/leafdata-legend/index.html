@@ -32,7 +32,7 @@
       </svg>
     </div>
     <!-- 右击菜单 -->
-    <ul id="right_click_menu" class="dropdown-menu">
+    <!-- <ul id="right_click_menu" class="dropdown-menu">
       <li id="reset"><a tabindex="-1">重置所有内容</a></li>
       <li id="prev-step"><a tabindex="-1">上一步操作</a></li>
       <li id="next-stept"><a tabindex="-1">下一步操作</a></li>
@@ -48,10 +48,12 @@
       <li id="save-img-jpg"><a tabindex="-1">导出图片（.jpg）</a></li>
       <li id="save-file-svg"><a tabindex="-1">导出文件（.svg）</a></li>
       <li id="save-file"><a tabindex="-1">导出文件（.tree）</a></li>
-    </ul>
+      <li id="save-file-node"><a tabindex="-1">导出选中子树（.txt）</a></li>
+      <li id="save-file-id"><a tabindex="-1">导出选中Id（.txt）</a></li>
+    </ul> -->
 
     <!-- 添加分支 -->
-    <div class="modal-wrap" id="modal-input-wrap" style="display: none;">
+    <!-- <div class="modal-wrap" id="modal-input-wrap" style="display: none;">
       <div class="modal-box">
         <div class="modal-title">
           <span>添加新分支</span>
@@ -69,10 +71,10 @@
           <button class="no">取消</button>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- 编辑新分支 -->
-    <div class="modal-wrap" id="modal-textarea-wrap" style="display: none;">
+    <!-- <div class="modal-wrap" id="modal-textarea-wrap" style="display: none;">
       <div class="modal-box" style="width: 480px;">
         <div class="modal-title">
           <span>编辑全部分支</span>
@@ -86,8 +88,9 @@
           <button class="no">取消</button>
         </div>
       </div>
-    </div>
-    <!-- loading -->
+    </div> 
+ -->
+
     <div class="loading-box" v-show="isLoading">
       <img src="/img/loading.gif" />
     </div>

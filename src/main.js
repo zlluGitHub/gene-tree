@@ -4,6 +4,63 @@ const parseString = require('xml2js').parseString;
   var d3_layout_phylotree_event_id = "d3.layout.phylotree.event",
     d3_layout_phylotree_context_menu_id = "d3_layout_phylotree_context_menu";
   var inData = "";
+  window.getSelectTreeJson = null;
+  // 获取选中节点
+  function getSelectTreeData(node, arr) {
+    if (node.children) {
+      node.children.forEach(function (item) {
+        getSelectTreeData(item, arr)
+      })
+    } else {
+      arr.push(node)
+    }
+    return arr
+  }
+  function handleSelectTree(node) {
+    var treeNewData = getSelectTreeData(rootNodeData, [])
+    window.getSelectTreeJson = function (mark) {
+      if (mark) {
+        return {
+          currentNode: node,
+          allBranch: treeNewData, selectBranch: treeNewData.filter(function (node) {
+            return node.selected ? true : false
+          })
+        }
+      } else {
+        var filterData = treeNewData.filter(function (node) {
+          return node.selected ? true : false
+        })
+        return {
+          currentNode: {
+            attribute: node.attribute,
+            depth: node.depth,
+            id: node.id,
+            name: node.name,
+          },
+          allNode: treeNewData.map(function (node) {
+            return {
+              attribute: node.attribute,
+              depth: node.depth,
+              id: node.id,
+              name: node.name,
+            }
+          }),
+          selectNode: filterData.map(function (node) {
+            return {
+              attribute: node.attribute,
+              depth: node.depth,
+              id: node.id,
+              name: node.name,
+            }
+          })
+        }
+      }
+    }
+
+    // console.log(getSelectTreeJson());
+  }
+
+
 
   /**
    * Parses a Newick string into an equivalent JSON representation that is
@@ -759,10 +816,11 @@ const parseString = require('xml2js').parseString;
         // newick string
         _node_data = d3_phylotree_newick_parser(nwk, bootstrap_values);
       }
-
+      // console.log(_node_data);
       if (!_node_data["json"]) {
         nodes = [];
       } else {
+        window.rootNodeData = _node_data.json
 
         newick_string = nwk;
         nodes = d3_hierarchy.call(this, _node_data.json);
@@ -924,16 +982,21 @@ const parseString = require('xml2js').parseString;
           }
 
           if (options["selectable"]) {
+
             menu_object
               .append("li")
               .append("a")
               .attr("tabindex", "-1")
               .text(optlan == 'ch' ? "选择后代树分支" : "Mark all leafs")
               .on("click", function (d) {
+
                 menu_object.style("display", "none");
                 phylotree.modify_selection(
                   phylotree.select_all_descendants(node, true, true)
                 );
+
+                // 处理选中节点
+                handleSelectTree(node)
               });
 
             menu_object
@@ -971,7 +1034,10 @@ const parseString = require('xml2js').parseString;
               .text(optlan == 'ch' ? "当前树节点分支" : "Mark branch")
               .on("click", function (d) {
                 menu_object.style("display", "none");
+                // console.log(node);
                 phylotree.modify_selection([node]);
+                // 处理选中节点
+                handleSelectTree(node)
               });
 
             menu_object
@@ -1117,7 +1183,7 @@ const parseString = require('xml2js').parseString;
               });
           }
           // 添加新分支
-          if (options['add']&& inData.indexOf("(") > -1 && inData.indexOf(")") > -1) {
+          if (options['add'] && inData.indexOf("(") > -1 && inData.indexOf(")") > -1) {
             menu_object
               .append("li")
               .append("a")
@@ -1191,7 +1257,7 @@ const parseString = require('xml2js').parseString;
           // }
 
           // 编辑所有分支
-          if (options['edit-all-node']&& inData.indexOf("(") > -1 && inData.indexOf(")") > -1) {
+          if (options['edit-all-node'] && inData.indexOf("(") > -1 && inData.indexOf(")") > -1) {
             menu_object
               .append("li")
               .append("a")
@@ -2269,6 +2335,141 @@ const parseString = require('xml2js').parseString;
         phylotree.layout();
       }
 
+
+      // 右击菜单
+      var menuList = [{
+        id: 'reset',
+        en: 'Reset tree',
+        ch: '重置所有内容'
+      }, {
+        id: 'prev-step',
+        en: 'Last step',
+        ch: '上一步操作'
+      }, {
+        id: 'next-stept',
+        en: 'Next step',
+        ch: '下一步操作'
+      }, {
+        divider: true,
+      },
+      {
+        id: 'tip_left',
+        en: 'Align left',
+        ch: '左对齐'
+      }, {
+        id: 'tip_right',
+        en: 'Align right',
+        ch: '右对齐'
+      }, {
+        divider: true,
+      }, {
+        id: 'sort_original',
+        en: 'Default layout',
+        ch: '默认布局'
+      }, {
+        id: 'sort_descending',
+        en: 'Ascending layout',
+        ch: '升序布局'
+      }, {
+        id: 'sort_ascending',
+        en: 'Flashback layout',
+        ch: '倒叙布局'
+      }, {
+        divider: true,
+      }, {
+        id: 'save-img-pdf',
+        en: 'Export pdf（.pdf）',
+        ch: '导出图片（.pdf）'
+      }, {
+        id: 'save-img-jpg',
+        en: 'Export jpg（.jpg）',
+        ch: '导出图片（.jpg）'
+      }, {
+        id: 'save-file-svg',
+        en: 'Export svg（.svg）',
+        ch: '导出文件（.svg）'
+      }, {
+        id: 'save-file',
+        en: 'Export file（.tree）',
+        ch: '导出文件（.tree）'
+      }, {
+        id: 'save-file-node',
+        en: 'Export selected id list（.txt）',
+        ch: '导出选中子树ID列表（.txt）'
+      }]
+
+      d3.selectAll(".dropdown-menu").each(function (d, i) {
+        this.remove()
+      });
+      var ul = d3.select('body')
+        .append("ul")
+        .attr("id", 'right_click_menu')
+        .attr("class", "dropdown-menu")
+
+      menuList.forEach(function (item) {
+        var li = ""
+        if (item.divider) {
+          li = ul.append("li").attr("class", 'divider').attr("id", item.id)
+        } else {
+          li = ul.append("li").attr("id", item.id)
+          var a = li.append("a").style("cursor", "pointer")
+          a.text(options['language'] === 'ch' ? item.ch : item.en);
+        }
+      })
+
+
+      // 清除分支
+      d3.selectAll(".modal-wrap").each(function (d, i) {
+        this.remove()
+      });
+
+      // //  添加分支
+      // var modal_input_wrap = d3.select('body').append("div").attr("id", 'modal-input-wrap')
+      //   .attr("class", "modal-wrap").style("display", "none")
+      // modal_input_wrap.html(`<div class="modal-box">
+      //   <div class="modal-title">
+      //     <span>${options['language'] === 'ch' ? '添加新分支' : 'Add new branch'}</span>
+      //   </div>
+      //   <div class="list">
+      //     <span>${options['language'] === 'ch' ? '分支名称' : 'Branch name'}</span>
+      //     <input type="text" class="input-name">
+      //   </div>
+      //   <div class="list">
+      //     <span>${options['language'] === 'ch' ? '分支长度' : 'Branch length'}</span>
+      //     <input type="text" class="input-length">
+      //   </div>
+      //   <div class="modal-button">
+      //     <button class="ok">${options['language'] === 'ch' ? '确定' : 'Ok'}</button>
+      //     <button class="no">${options['language'] === 'ch' ? '取消' : 'Cancel'}</button>
+      //   </div>
+      // </div>`);
+
+      // // 编辑新分支
+      // var modal_textarea_wrap = d3.select('body').append("div").attr("id", 'modal-textarea-wrap')
+      //   .attr("class", "modal-wrap").style("display", "none")
+      // modal_textarea_wrap.html(`<div class="modal-box" style="width: 480px;">
+      //       <div class="modal-title">
+      //         <span>${options['language'] === 'ch' ? '编辑全部分支' : 'Edit branches'}</span>
+      //       </div>
+      //       <div class="list">
+      //         <textarea id="nwk_spec" placeholder="${options['language'] === 'ch' ? '例如' : 'Example'}：(A:0.12,B:0.260,C:0.260)0.021:0.169" rows="6" selectionstart="1"
+      //           selectionend="1"></textarea>
+      //       </div>
+      //       <div class="modal-button">
+      //       <button class="ok">${options['language'] === 'ch' ? '确定' : 'Ok'}</button>
+      //       <button class="no">${options['language'] === 'ch' ? '取消' : 'Cancel'}</button>
+      //       </div>
+      //     </div>
+      //   </div>`);
+
+
+      var modal_input_wrap = d3.select('body').append("div").attr("id", 'modal-input-wrap').attr("class", "modal-wrap").style("display", "none");
+      modal_input_wrap.html("<div class=\"modal-box\">\n        <div class=\"modal-title\">\n          <span>" + (options['language'] === 'ch' ? '添加新分支' : 'Add new branch') + "</span>\n        </div>\n        <div class=\"list\">\n          <span>" + (options['language'] === 'ch' ? '分支名称' : 'Branch name') + "</span>\n          <input type=\"text\" class=\"input-name\">\n        </div>\n        <div class=\"list\">\n          <span>" + (options['language'] === 'ch' ? '分支长度' : 'Branch length') + "</span>\n          <input type=\"text\" class=\"input-length\">\n        </div>\n        <div class=\"modal-button\">\n          <button class=\"ok\">" + (options['language'] === 'ch' ? '确定' : 'Ok') + "</button>\n          <button class=\"no\">" + (options['language'] === 'ch' ? '取消' : 'Cancel') + "</button>\n        </div>\n      </div>");
+
+      var modal_textarea_wrap = d3.select('body').append("div").attr("id", 'modal-textarea-wrap').attr("class", "modal-wrap").style("display", "none");
+      modal_textarea_wrap.html("<div class=\"modal-box\" style=\"width: 480px;\">\n            <div class=\"modal-title\">\n              <span>" + (options['language'] === 'ch' ? '编辑全部分支' : 'Edit branches') + "</span>\n            </div>\n            <div class=\"list\">\n              <textarea id=\"nwk_spec\" placeholder=\"" + (options['language'] === 'ch' ? '例如' : 'Example') + "：(A:0.12,B:0.260,C:0.260)0.021:0.169\" rows=\"6\" selectionstart=\"1\"\n                selectionend=\"1\"></textarea>\n            </div>\n            <div class=\"modal-button\">\n            <button class=\"ok\">" + (options['language'] === 'ch' ? '确定' : 'Ok') + "</button>\n            <button class=\"no\">" + (options['language'] === 'ch' ? '取消' : 'Cancel') + "</button>\n            </div>\n          </div>\n        </div>");
+
+
       return phylotree;
     };
 
@@ -2722,6 +2923,7 @@ const parseString = require('xml2js').parseString;
           d.children.forEach(sel);
         }
       }
+
       sel(node);
       return selection;
     };

@@ -136,7 +136,7 @@ function init_tree(tree_data, isUpdate) {
       // 'top-bottom-spacing': 'fit-to-size',
       // zoom: true,
       transitions: isTransitions,
-      language: 'ch', //chinese english
+      language: 'en', //ch en
       legend: legendArr,
       itemStyle: config,
       'scaleBar-position': 'bottom', //比例尺 bottom
@@ -587,3 +587,19 @@ var app = document.querySelector('body');
 app.onclick = function () {
   menu.attr("style", "display:none;");
 };
+
+
+// 导出选中子树（.txt）
+$("#save-file-node").on("click", function (e) {
+  if (getSelectTreeJson) {
+    $(".loading-box").attr("style", "display:flex"); 
+    var text = ""
+    getSelectTreeJson(false).selectNode.forEach(function (node) {
+      text = text + node.name + '\n'
+    })
+    exportRaw('select_node.txt', text);
+    $(".loading-box").attr("style", "display:none");
+  } else {
+    alert('请先选择子树后导出！')
+  }
+});
