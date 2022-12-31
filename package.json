@@ -22,12 +22,12 @@
   },
   "devDependencies": {
     "concurrently": "^3.6.1",
-    "html-webpack-plugin": "^4.0.4",
+    "html-webpack-plugin": "^5.5.0",
     "http-server": "^0.11.1",
     "jsdom": "9.12.x",
     "should": "^11.2.1",
-    "webpack": "^4.6.0",
-    "webpack-cli": "^3.1.2"
+    "webpack": "^5.75.0",
+    "webpack-cli": "^5.0.1"
   },
   "scripts": {
     "build": "webpack",
