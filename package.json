@@ -23,7 +23,7 @@
   "devDependencies": {
     "concurrently": "^3.6.1",
     "html-webpack-plugin": "^4.0.4",
-    "http-server": "^0.11.1",
+    "http-server": "^14.1.1",
     "jsdom": "9.12.x",
     "should": "^11.2.1",
     "webpack": "^4.6.0",
